@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/faq", "destination": "/index.html" },
+    { "source": "/(?!api|_next|.*\\..*$).*$", "destination": "/index.html" }
+  ]
+
+}
+
