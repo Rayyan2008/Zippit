@@ -1,94 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from '../components/ui/input';
-import { Trash2, Search, Users } from 'lucide-react';
+import { Search, Users } from 'lucide-react';
+import { getCustomers } from '../lib/db';
 
 export default function AdminCustomersPage() {
   const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Load customers from orders in localStorage
-    const orders = JSON.parse(localStorage.getItem('zippit_orders') || '[]');
-    const uniqueCustomers = Array.from(
-      new Map(
-        orders.map((order) => [
-          order.email,
-          {
-            id: order.id,
-            name: order.customerName,
-            email: order.email,
-            phone: order.phone,
-            orderCount: orders.filter((o) => o.email === order.email).length,
-            totalSpent: orders
-              .filter((o) => o.email === order.email)
-              .reduce((sum, o) => sum + (o.total || 0), 0),
-          },
-        ])
-      ).values()
-    );
-    setCustomers(uniqueCustomers);
+    getCustomers().then(data => { setCustomers(data); setLoading(false); }).catch(e => { console.error(e); setLoading(false); });
   }, []);
 
-  const filteredCustomers = customers.filter((customer) =>
-    customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filtered = customers.filter(c =>
+    c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
-        <h1 className="font-display text-display-md text-ink mb-1">Customers</h1>
-        <p className="eyebrow text-ink/60">Manage your customer list</p>
+        <h1 className="font-display text-display-md text-ink dark:text-cream mb-1">Customers</h1>
+        <p className="eyebrow text-ink/60 dark:text-cream/60">Customers derived from order history</p>
       </div>
-
-      {/* Search Bar */}
-      <div className="flex gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-ink/40" />
-          <Input
-            type="text"
-            placeholder="Search by name or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 border-ink/15 text-ink"
-          />
-        </div>
+      <div className="relative max-w-md">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink/40" />
+        <Input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search customers..."
+          className="pl-9 border-ink/15 text-ink dark:text-cream dark:bg-card" />
       </div>
-
-      {/* Customers Table */}
-      <div className="border border-ink/10 bg-white overflow-hidden">
-        {filteredCustomers.length === 0 ? (
-          <div className="p-12 text-center">
-            <Users className="h-12 w-12 text-ink/20 mx-auto mb-3" />
-            <p className="text-ink/60">No customers found</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
+      <div className="border border-ink/10 dark:border-ink/20 bg-background dark:bg-card overflow-hidden">
+        {loading ? <div className="p-12 text-center text-ink/40 dark:text-cream/40">Loading…</div> :
+          filtered.length === 0 ? (
+            <div className="p-12 text-center">
+              <Users className="h-12 w-12 text-ink/20 dark:text-cream/20 mx-auto mb-3" />
+              <p className="text-ink/60 dark:text-cream/60">No customers yet</p>
+            </div>
+          ) : (
             <table className="w-full">
-              <thead className="border-b border-ink/10 bg-cream">
+              <thead className="border-b border-ink/10 dark:border-ink/20 bg-cream dark:bg-card/50">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs eyebrow text-ink/60">NAME</th>
-                  <th className="px-6 py-4 text-left text-xs eyebrow text-ink/60">EMAIL</th>
-                  <th className="px-6 py-4 text-left text-xs eyebrow text-ink/60">PHONE</th>
-                  <th className="px-6 py-4 text-left text-xs eyebrow text-ink/60">ORDERS</th>
-                  <th className="px-6 py-4 text-left text-xs eyebrow text-ink/60">TOTAL SPENT</th>
+                  {['NAME','EMAIL','PHONE','ORDERS','TOTAL SPENT'].map(h => (
+                    <th key={h} className="px-6 py-4 text-left text-xs eyebrow text-ink/60 dark:text-cream/60">{h}</th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-ink/10">
-                {filteredCustomers.map((customer) => (
-                  <tr key={customer.email} className="hover:bg-cream/50 transition-colors">
-                    <td className="px-6 py-4 text-sm font-medium text-ink">{customer.name || 'N/A'}</td>
-                    <td className="px-6 py-4 text-sm text-ink/70">{customer.email}</td>
-                    <td className="px-6 py-4 text-sm text-ink/70">{customer.phone || 'N/A'}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-ink">{customer.orderCount}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-ink">₹{customer.totalSpent.toLocaleString()}</td>
+              <tbody className="divide-y divide-ink/10 dark:divide-ink/20">
+                {filtered.map(c => (
+                  <tr key={c.email} className="hover:bg-cream/50 dark:hover:bg-card/50 transition-colors">
+                    <td className="px-6 py-4 text-sm font-medium text-ink dark:text-cream">{c.name || 'N/A'}</td>
+                    <td className="px-6 py-4 text-sm text-ink/70 dark:text-cream/70">{c.email}</td>
+                    <td className="px-6 py-4 text-sm text-ink/70 dark:text-cream/70">{c.phone || 'N/A'}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-ink dark:text-cream">{c.orderCount}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-ink dark:text-cream">₹{c.totalSpent.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
+          )
+        }
       </div>
     </div>
   );

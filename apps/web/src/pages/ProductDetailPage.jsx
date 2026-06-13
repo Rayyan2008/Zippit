@@ -9,12 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import Header from '@/components/Header.jsx';
 import Footer from '@/components/Footer.jsx';
+import ShoppingCart from '@/components/ShoppingCart.jsx';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const [cartOpen, setCartOpen] = useState(false);
   
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -149,7 +151,7 @@ const ProductDetailPage = () => {
       </Helmet>
 
       <div className="min-h-screen bg-cream text-ink">
-        <Header />
+        <Header onOpenCart={() => setCartOpen(true)} />
 
         <main className="container mx-auto px-4 py-8 md:py-12">
           <button
@@ -298,6 +300,8 @@ const ProductDetailPage = () => {
         </main>
 
         <Footer />
+
+        <ShoppingCart isCartOpen={cartOpen} setIsCartOpen={setCartOpen} />
       </div>
     </>
   );

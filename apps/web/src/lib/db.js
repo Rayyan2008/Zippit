@@ -1,105 +1,260 @@
-/**
- * db.js — Supabase data layer
- * Drop-in replacement for all localStorage('zippit_*') patterns.
- *
- * Tables required in Supabase (see supabase/schema.sql):
- *   products, categories, orders, inquiries, coupons
- */
+import { supabase } from './supabase.js';
 
-import { supabase } from './supabase';
+// ============================================
+// PRODUCTS
+// ============================================
+export async function getProducts({ category, limit, featured } = {}) {
+  let query = supabase.from('products').select('*').order('created_at', { ascending: false });
+  if (category && category !== 'All') query = query.eq('category', category);
+  if (featured) query = query.eq('is_featured', true);
+  if (limit) query = query.limit(Number(limit));
+  const { data, error } = await query;
+  if (error) throw error;
+  return data || [];
+}
 
-// ─── helpers ────────────────────────────────────────────────────────────────
-
-function handle({ data, error }) {
+export async function getProduct(id) {
+  const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
   if (error) throw error;
   return data;
 }
 
-// ─── PRODUCTS ────────────────────────────────────────────────────────────────
-
-export async function getProducts({ category, limit } = {}) {
-  let q = supabase.from('products').select('*').order('created_at', { ascending: false });
-  if (category && category !== 'All') q = q.eq('category', category);
-  if (limit) q = q.limit(limit);
-  return handle(await q);
+export async function createProduct(product) {
+  const payload = {
+    ...product,
+    name: product.name || product.title || null,
+    title: product.title || product.name || null,
+  };
+  const { data, error } = await supabase.from('products').insert([payload]).select().single();
+  if (error) throw error;
+  return data;
 }
 
-export async function createProduct(data) {
-  return handle(await supabase.from('products').insert([data]).select().single());
-}
-
-export async function updateProduct(id, data) {
-  return handle(await supabase.from('products').update(data).eq('id', id).select().single());
+export async function updateProduct(id, updates) {
+  const payload = { ...updates };
+  if (!payload.name && payload.title) payload.name = payload.title;
+  if (!payload.title && payload.name) payload.title = payload.name;
+  const { data, error } = await supabase.from('products').update(payload).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
 }
 
 export async function deleteProduct(id) {
-  return handle(await supabase.from('products').delete().eq('id', id));
+  const { error } = await supabase.from('products').delete().eq('id', id);
+  if (error) throw error;
 }
 
-// ─── CATEGORIES ──────────────────────────────────────────────────────────────
-
+// ============================================
+// CATEGORIES
+// ============================================
 export async function getCategories() {
-  return handle(await supabase.from('categories').select('*').order('name'));
+  const { data, error } = await supabase.from('categories').select('*').order('name');
+  if (error) throw error;
+  return data || [];
 }
 
-export async function createCategory(data) {
-  return handle(await supabase.from('categories').insert([data]).select().single());
+export async function createCategory(category) {
+  const { data, error } = await supabase.from('categories').insert([category]).select().single();
+  if (error) throw error;
+  return data;
 }
 
-export async function updateCategory(id, data) {
-  return handle(await supabase.from('categories').update(data).eq('id', id).select().single());
+export async function updateCategory(id, updates) {
+  const { data, error } = await supabase.from('categories').update(updates).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
 }
 
 export async function deleteCategory(id) {
-  return handle(await supabase.from('categories').delete().eq('id', id));
+  const { error } = await supabase.from('categories').delete().eq('id', id);
+  if (error) throw error;
 }
 
-// ─── ORDERS ──────────────────────────────────────────────────────────────────
-
+// ============================================
+// ORDERS
+// ============================================
 export async function getOrders() {
-  return handle(
-    await supabase.from('orders').select('*').order('created_at', { ascending: false })
-  );
+  const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
 }
 
-export async function updateOrderStatus(id, status) {
-  return handle(await supabase.from('orders').update({ status }).eq('id', id).select().single());
+export async function getOrder(id) {
+  const { data, error } = await supabase.from('orders').select('*').eq('id', id).single();
+  if (error) throw error;
+  return data;
+}
+
+export async function createOrder(order) {
+  const order_number = `ORD-${Date.now()}`;
+  const payload = { ...order, order_number };
+  const { data, error } = await supabase.from('orders').insert([payload]).select().single();
+  if (error) throw error;
+  try {
+    await supabase.from('order_status_history').insert([{ order_id: data.id, status: 'Confirmed', note: 'Order placed' }]);
+  } catch (e) { console.warn('History insert failed:', e); }
+  return data;
+}
+
+export async function updateOrderStatus(id, status, note = '') {
+  const { data, error } = await supabase.from('orders').update({ status }).eq('id', id).select().single();
+  if (error) throw error;
+  try {
+    await supabase.from('order_status_history').insert([{ order_id: id, status, note }]);
+  } catch (e) { console.warn('History insert failed:', e); }
+  return data;
 }
 
 export async function deleteOrder(id) {
-  return handle(await supabase.from('orders').delete().eq('id', id));
+  const { error } = await supabase.from('orders').delete().eq('id', id);
+  if (error) throw error;
+  try {
+    await supabase.from('order_status_history').delete().eq('order_id', id);
+  } catch (e) { console.warn('Order history cleanup failed:', e); }
+  return true;
 }
 
-// ─── INQUIRIES ───────────────────────────────────────────────────────────────
+export async function resetDashboardData() {
+  const { error: historyError } = await supabase.from('order_status_history').delete();
+  if (historyError) throw historyError;
 
+  return true;
+}
+
+// ============================================
+// INQUIRIES
+// ============================================
 export async function getInquiries() {
-  return handle(
-    await supabase.from('inquiries').select('*').order('created_at', { ascending: false })
-  );
+  const { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
 }
 
-export async function updateInquiry(id, data) {
-  return handle(await supabase.from('inquiries').update(data).eq('id', id).select().single());
+export async function createInquiry(inquiry) {
+  const { data, error } = await supabase.from('inquiries').insert([inquiry]).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateInquiry(id, updates) {
+  const { data, error } = await supabase.from('inquiries').update(updates).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
 }
 
 export async function deleteInquiry(id) {
-  return handle(await supabase.from('inquiries').delete().eq('id', id));
+  const { error } = await supabase.from('inquiries').delete().eq('id', id);
+  if (error) throw error;
 }
 
-// ─── COUPONS ─────────────────────────────────────────────────────────────────
-
+// ============================================
+// COUPONS
+// ============================================
 export async function getCoupons() {
-  return handle(await supabase.from('coupons').select('*').order('created_at', { ascending: false }));
+  const { data, error } = await supabase.from('coupons').select('*').order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
 }
 
-export async function createCoupon(data) {
-  return handle(await supabase.from('coupons').insert([data]).select().single());
+export async function validateCoupon(code, orderTotal) {
+  const { data, error } = await supabase.from('coupons').select('*').eq('code', code.toUpperCase()).eq('is_active', true).single();
+  if (error || !data) return { valid: false, message: 'Invalid coupon code' };
+  if (data.expires_at && new Date(data.expires_at) < new Date()) return { valid: false, message: 'Coupon has expired' };
+  if (data.max_uses && data.used_count >= data.max_uses) return { valid: false, message: 'Coupon usage limit reached' };
+  if (orderTotal < (data.min_order || 0)) return { valid: false, message: `Minimum order is ₹${data.min_order}` };
+  const discount = data.type === 'percentage' ? Math.round(orderTotal * data.value / 100) : data.value;
+  return { valid: true, discount, coupon: data };
 }
 
-export async function updateCoupon(id, data) {
-  return handle(await supabase.from('coupons').update(data).eq('id', id).select().single());
+export async function createCoupon(coupon) {
+  const payload = {
+    ...coupon,
+    code: coupon.code.toUpperCase(),
+    discount_percent: coupon.type === 'percentage' ? coupon.value : 0,
+  };
+  const { data, error } = await supabase.from('coupons').insert([payload]).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateCoupon(id, updates) {
+  const payload = { ...updates };
+  if (updates.type === 'percentage' || updates.value !== undefined) {
+    payload.discount_percent = updates.type === 'percentage' 
+      ? updates.value 
+      : (updates.discount_percent !== undefined ? updates.discount_percent : 0);
+  }
+  const { data, error } = await supabase.from('coupons').update(payload).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
 }
 
 export async function deleteCoupon(id) {
-  return handle(await supabase.from('coupons').delete().eq('id', id));
+  const { error } = await supabase.from('coupons').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ============================================
+// CUSTOMERS (derived from orders)
+// ============================================
+export async function getCustomers() {
+  const { data, error } = await supabase.from('orders').select('customer_name, customer_email, customer_phone, total, created_at');
+  if (error) throw error;
+  const map = new Map();
+  (data || []).forEach(order => {
+    const key = order.customer_email;
+    if (!key) return;
+    if (!map.has(key)) {
+      map.set(key, { name: order.customer_name, email: order.customer_email, phone: order.customer_phone, orderCount: 0, totalSpent: 0 });
+    }
+    const c = map.get(key);
+    c.orderCount++;
+    c.totalSpent += Number(order.total) || 0;
+  });
+  return Array.from(map.values());
+}
+
+// ============================================
+// DASHBOARD STATS
+// ============================================
+export async function getDashboardStats() {
+  const [productsRes, ordersRes, inquiriesRes] = await Promise.all([
+    supabase.from('products').select('id, stock_quantity, stock'),
+    supabase.from('orders').select('id, total, status, created_at'),
+    supabase.from('inquiries').select('id, status, name, email, created_at'),
+  ]);
+
+  const products = productsRes.data || [];
+  const orders = ordersRes.data || [];
+  const inquiries = inquiriesRes.data || [];
+
+  const totalRevenue = orders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+  const pendingOrders = orders.filter(o => o.status === 'Pending' || o.status === 'Confirmed' || o.status === 'Order Placed').length;
+  const lowStockProducts = products.filter(p => (p.stock_quantity || p.stock || 0) < 5).length;
+
+  const now = new Date();
+  const chartData = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
+    const monthOrders = orders.filter(o => {
+      const od = new Date(o.created_at);
+      return od.getMonth() === d.getMonth() && od.getFullYear() === d.getFullYear();
+    });
+    return {
+      name: d.toLocaleString('default', { month: 'short' }),
+      sales: monthOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0),
+      orders: monthOrders.length,
+    };
+  });
+
+  return {
+    totalProducts: products.length,
+    totalOrders: orders.length,
+    totalRevenue,
+    totalInquiries: inquiries.length,
+    pendingOrders,
+    lowStockProducts,
+    chartData,
+    recentOrders: orders.slice(-5).reverse(),
+    recentInquiries: inquiries.slice(-5).reverse(),
+  };
 }

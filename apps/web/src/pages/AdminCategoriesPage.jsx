@@ -2,172 +2,104 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Trash2, Edit2, Plus } from 'lucide-react';
+import { getCategories, createCategory, updateCategory, deleteCategory } from '../lib/db';
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-  });
+  const [formData, setFormData] = useState({ name: '', description: '' });
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
+  useEffect(() => { loadCategories(); }, []);
 
-  const loadCategories = () => {
-    const stored = localStorage.getItem('zippit_categories');
-    setCategories(stored ? JSON.parse(stored) : []);
+  const loadCategories = async () => {
+    setLoading(true);
+    try { const data = await getCategories(); setCategories(data); }
+    catch (e) { setError(e.message); }
+    finally { setLoading(false); }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name) {
-      alert('Category name is required');
-      return;
-    }
-
-    if (editingId) {
-      const updated = categories.map((c) =>
-        c.id === editingId ? { ...formData, id: editingId } : c
-      );
-      setCategories(updated);
-      localStorage.setItem('zippit_categories', JSON.stringify(updated));
-      setEditingId(null);
-    } else {
-      const newCategory = {
-        ...formData,
-        id: `category_${Date.now()}`,
-      };
-      setCategories([...categories, newCategory]);
-      localStorage.setItem(
-        'zippit_categories',
-        JSON.stringify([...categories, newCategory])
-      );
-    }
-
-    setFormData({ name: '', description: '' });
-    setShowForm(false);
+    if (!formData.name) { alert('Category name is required'); return; }
+    try {
+      if (editingId) {
+        const updated = await updateCategory(editingId, formData);
+        setCategories(prev => prev.map(c => c.id === editingId ? updated : c));
+      } else {
+        const created = await createCategory(formData);
+        setCategories(prev => [...prev, created]);
+      }
+      setShowForm(false); setEditingId(null); setFormData({ name: '', description: '' });
+    } catch (e) { setError(e.message); }
   };
 
-  const handleEdit = (category) => {
-    setFormData(category);
-    setEditingId(category.id);
-    setShowForm(true);
-  };
-
-  const handleDelete = (id) => {
-    if (confirm('Are you sure you want to delete this category?')) {
-      const updated = categories.filter((c) => c.id !== id);
-      setCategories(updated);
-      localStorage.setItem('zippit_categories', JSON.stringify(updated));
-    }
-  };
-
-  const handleCancel = () => {
-    setShowForm(false);
-    setEditingId(null);
-    setFormData({ name: '', description: '' });
+  const handleDelete = async (id) => {
+    if (!confirm('Delete this category?')) return;
+    try { await deleteCategory(id); setCategories(prev => prev.filter(c => c.id !== id)); }
+    catch (e) { setError(e.message); }
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold text-foreground">Categories</h2>
-        <Button
-          onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2"
-        >
-          <Plus size={20} />
-          Add Category
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-display-md text-ink dark:text-cream mb-1">Categories</h1>
+          <p className="eyebrow text-ink/60 dark:text-cream/60">Manage product categories</p>
+        </div>
+        <Button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-rouge hover:bg-wine text-cream border-none">
+          <Plus size={20} /> Add Category
         </Button>
       </div>
 
+      {error && <div className="bg-rouge/10 border border-rouge/20 text-rouge px-4 py-3 text-sm">{error}</div>}
+
       {showForm && (
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h3 className="text-xl font-bold mb-4">
-            {editingId ? 'Edit Category' : 'Add New Category'}
-          </h3>
+        <div className="border border-ink/10 dark:border-ink/20 bg-background dark:bg-card p-6">
+          <h2 className="font-display text-lg text-ink dark:text-cream mb-4">{editingId ? 'Edit Category' : 'Add Category'}</h2>
           <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category Name *
-              </label>
-              <Input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="e.g., Daily Essentials"
-                required
-              />
+              <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-1">NAME *</label>
+              <Input value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                placeholder="e.g., Daily Essentials" required className="border-ink/15 text-ink dark:text-cream dark:bg-card" />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Category description"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows="3"
-              />
+              <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-1">DESCRIPTION</label>
+              <textarea value={formData.description} onChange={e => setFormData(p => ({ ...p, description: e.target.value }))}
+                placeholder="Category description" rows="3"
+                className="w-full px-3 py-2 border border-ink/15 dark:border-ink/30 bg-background dark:bg-card text-ink dark:text-cream focus:outline-none focus:ring-2 focus:ring-rouge/50" />
             </div>
-
-            <div className="flex gap-2">
-              <Button type="submit" className="flex-1">
-                {editingId ? 'Update Category' : 'Add Category'}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCancel}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
+            <div className="flex gap-3">
+              <Button type="submit" className="flex-1 bg-rouge hover:bg-wine text-cream border-none">{editingId ? 'Update' : 'Add'} Category</Button>
+              <Button type="button" variant="outline" onClick={() => { setShowForm(false); setEditingId(null); setFormData({ name: '', description: '' }); }}
+                className="flex-1 border-ink/15 dark:border-ink/30 text-ink dark:text-cream">Cancel</Button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {categories.length === 0 ? (
-          <div className="col-span-full text-center py-12 bg-white rounded-lg">
-            <p className="text-gray-500">No categories yet. Add one to get started!</p>
-          </div>
-        ) : (
-          categories.map((category) => (
-            <div key={category.id} className="bg-white rounded-lg shadow p-4">
-              <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
-              <p className="text-sm text-gray-600 mb-4">{category.description}</p>
+        {loading ? <p className="col-span-full text-center text-ink/40 dark:text-cream/40 py-12">Loading…</p> :
+          categories.length === 0 ? <p className="col-span-full text-center text-ink/60 dark:text-cream/60 py-12">No categories yet.</p> :
+          categories.map(cat => (
+            <div key={cat.id} className="border border-ink/10 dark:border-ink/20 bg-background dark:bg-card p-5">
+              <h3 className="font-display text-lg text-ink dark:text-cream mb-1">{cat.name}</h3>
+              <p className="text-sm text-ink/60 dark:text-cream/60 mb-4">{cat.description}</p>
               <div className="flex gap-2">
-                <button
-                  onClick={() => handleEdit(category)}
-                  className="flex-1 py-2 px-3 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
-                >
-                  Edit
+                <button onClick={() => { setFormData({ name: cat.name, description: cat.description || '' }); setEditingId(cat.id); setShowForm(true); }}
+                  className="flex-1 py-2 px-3 border border-rouge text-rouge text-sm hover:bg-rouge hover:text-cream transition-colors flex items-center justify-center gap-1">
+                  <Edit2 size={14} /> Edit
                 </button>
-                <button
-                  onClick={() => handleDelete(category.id)}
-                  className="flex-1 py-2 px-3 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-                >
-                  Delete
+                <button onClick={() => handleDelete(cat.id)}
+                  className="flex-1 py-2 px-3 border border-ink/20 dark:border-ink/30 text-ink dark:text-cream text-sm hover:border-rouge hover:text-rouge transition-colors flex items-center justify-center gap-1">
+                  <Trash2 size={14} /> Delete
                 </button>
               </div>
             </div>
           ))
-        )}
+        }
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Heart, Menu, Search, ShoppingBag, X } from 'lucide-react';
+import { Heart, Menu, Package, Search, ShoppingBag, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { site } from '@/data/site.js';
@@ -202,6 +202,16 @@ const Header = ({ onOpenCart, onOpenSearch }) => {
                 </span>
               )}
             </button>
+
+            <Link
+              to="/order-tracking"
+              data-cursor="hover"
+              aria-label="Track order"
+              className="hidden sm:inline-flex h-10 items-center gap-2 px-2 text-ink transition hover:opacity-60"
+            >
+              <Package className="h-5 w-5" />
+              <span className="eyebrow">Track</span>
+            </Link>
           </div>
         </div>
       </div>

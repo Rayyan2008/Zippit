@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createOrder } from '../lib/db.js';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -21,6 +22,8 @@ export const initiateRazorpayPayment = async ({
   customerName,
   customerEmail,
   customerPhone,
+  cartItems = [],
+  shippingAddress = {},
   onSuccess,
   onFailure,
 }) => {
@@ -46,24 +49,54 @@ export const initiateRazorpayPayment = async ({
     theme: {
       color: '#d94350',
     },
-    handler: function (response) {
-      const orderData = {
-        razorpay_payment_id: response.razorpay_payment_id,
-        amount: amount,
-        currency: currency,
-        timestamp: new Date().toISOString(),
-        customerName,
-        customerEmail,
-        customerPhone,
-        status: 'success',
-      };
+    handler: async function (response) {
+      try {
+        // Save order to Supabase database
+        const orderData = {
+          customer_name: customerName || 'Customer',
+          customer_email: customerEmail || '',
+          customer_phone: customerPhone || '',
+          total: amount,
+          status: 'Confirmed',
+          shipping_address: shippingAddress,
+          razorpay_payment_id: response.razorpay_payment_id,
+          items: cartItems.map(item => {
+            // Extract price using same logic as useCart's getCartTotal
+            let price = 0;
+            const variant = item.variant || item.product?.variants?.[0] || {};
+            
+            if (variant.sale_price_in_cents !== undefined || variant.price_in_cents !== undefined) {
+              price = (variant.sale_price_in_cents ?? variant.price_in_cents ?? 0) / 100;
+            } else if (variant.price_formatted) {
+              price = parseFloat(String(variant.price_formatted).replace(/[^\d.]/g, '')) || 0;
+            } else if (item.product?.price) {
+              price = parseFloat(String(item.product.price).replace(/[^\d.]/g, '')) || 0;
+            }
+            
+            return {
+              product_id: item.product?.id,
+              product_name: item.product?.title || 'Unknown',
+              variant_title: item.variant?.title,
+              quantity: item.quantity,
+              price: price,
+              total: price * item.quantity,
+            };
+          }),
+        };
 
-      const existingOrders = JSON.parse(localStorage.getItem('zippit_orders') || '[]');
-      existingOrders.push(orderData);
-      localStorage.setItem('zippit_orders', JSON.stringify(existingOrders));
-      localStorage.setItem('zippit_last_order', JSON.stringify(orderData));
+        const createdOrder = await createOrder(orderData);
+        
+        // Also keep in localStorage for reference
+        const existingOrders = JSON.parse(localStorage.getItem('zippit_orders') || '[]');
+        existingOrders.push({ ...orderData, id: createdOrder.id, order_number: createdOrder.order_number });
+        localStorage.setItem('zippit_orders', JSON.stringify(existingOrders));
+        localStorage.setItem('zippit_last_order', JSON.stringify(createdOrder));
 
-      onSuccess?.(orderData);
+        onSuccess?.(createdOrder);
+      } catch (error) {
+        console.error('Failed to save order:', error);
+        onFailure?.(error.message || 'Failed to process order');
+      }
     },
     modal: {
       ondismiss: function () {

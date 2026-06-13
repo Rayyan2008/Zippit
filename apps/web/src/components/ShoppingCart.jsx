@@ -12,6 +12,16 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [checkingOut, setCheckingOut] = useState(false);
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [customerDetails, setCustomerDetails] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    pincode: '',
+  });
 
   const total = getCartTotal() || 0;
 
@@ -25,23 +35,44 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
       return;
     }
 
+    setShowCheckoutForm(true);
+  };
+
+  const handleCheckoutSubmit = async () => {
+    if (!customerDetails.name || !customerDetails.email || !customerDetails.phone || !customerDetails.address) {
+      toast({
+        title: 'Missing details',
+        description: 'Please fill in all required fields.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setCheckingOut(true);
 
     try {
       await initiateRazorpayPayment({
         amount: total,
         currency: 'INR',
-        customerName: 'Customer',
-        customerEmail: 'customer@example.com',
-        customerPhone: '',
+        customerName: customerDetails.name,
+        customerEmail: customerDetails.email,
+        customerPhone: customerDetails.phone,
+        cartItems: cartItems,
+        shippingAddress: {
+          address: customerDetails.address,
+          city: customerDetails.city,
+          state: customerDetails.state,
+          pincode: customerDetails.pincode,
+        },
         onSuccess: (orderData) => {
           clearCart();
           setIsCartOpen(false);
+          setShowCheckoutForm(false);
           setCheckingOut(false);
           
           toast({
             title: 'Payment successful',
-            description: 'Your order has been placed successfully.',
+            description: `Your order ${orderData.order_number} has been placed successfully.`,
           });
           
           navigate('/success');
@@ -189,32 +220,135 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
             </div>
 
             <div className="border-t border-ink/10 px-6 py-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="eyebrow text-ink/60">Subtotal</span>
-                <span className="font-mono text-lg text-ink">₹{total.toFixed(2)}</span>
-              </div>
+              {showCheckoutForm ? (
+                <div className="space-y-4">
+                  <h3 className="font-display text-lg text-ink">Delivery Details</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs eyebrow text-ink/60 mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        value={customerDetails.name}
+                        onChange={(e) => setCustomerDetails(prev => ({ ...prev, name: e.target.value }))}
+                        placeholder="John Doe"
+                        className="w-full px-3 py-2 border border-ink/15 text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-rouge/50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs eyebrow text-ink/60 mb-1">Email *</label>
+                      <input
+                        type="email"
+                        value={customerDetails.email}
+                        onChange={(e) => setCustomerDetails(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="john@example.com"
+                        className="w-full px-3 py-2 border border-ink/15 text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-rouge/50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs eyebrow text-ink/60 mb-1">Phone *</label>
+                      <input
+                        type="tel"
+                        value={customerDetails.phone}
+                        onChange={(e) => setCustomerDetails(prev => ({ ...prev, phone: e.target.value }))}
+                        placeholder="9876543210"
+                        className="w-full px-3 py-2 border border-ink/15 text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-rouge/50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs eyebrow text-ink/60 mb-1">Address *</label>
+                      <input
+                        type="text"
+                        value={customerDetails.address}
+                        onChange={(e) => setCustomerDetails(prev => ({ ...prev, address: e.target.value }))}
+                        placeholder="Street address"
+                        className="w-full px-3 py-2 border border-ink/15 text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-rouge/50"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-xs eyebrow text-ink/60 mb-1">City</label>
+                        <input
+                          type="text"
+                          value={customerDetails.city}
+                          onChange={(e) => setCustomerDetails(prev => ({ ...prev, city: e.target.value }))}
+                          placeholder="Mumbai"
+                          className="w-full px-3 py-2 border border-ink/15 text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-rouge/50"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs eyebrow text-ink/60 mb-1">State</label>
+                        <input
+                          type="text"
+                          value={customerDetails.state}
+                          onChange={(e) => setCustomerDetails(prev => ({ ...prev, state: e.target.value }))}
+                          placeholder="MH"
+                          className="w-full px-3 py-2 border border-ink/15 text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-rouge/50"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs eyebrow text-ink/60 mb-1">Pincode</label>
+                      <input
+                        type="text"
+                        value={customerDetails.pincode}
+                        onChange={(e) => setCustomerDetails(prev => ({ ...prev, pincode: e.target.value }))}
+                        placeholder="400001"
+                        className="w-full px-3 py-2 border border-ink/15 text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-rouge/50"
+                      />
+                    </div>
+                  </div>
 
-              <div className="text-xs text-ink/50">
-                Shipping calculated at checkout. Free shipping on orders over ₹500.
-              </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-ink/10">
+                    <span className="font-display text-lg text-ink">Total</span>
+                    <span className="font-mono text-lg text-ink">₹{total.toFixed(2)}</span>
+                  </div>
 
-              <Button
-                onClick={handleCheckout}
-                disabled={checkingOut}
-                className="w-full bg-ink text-cream hover:bg-ink/90 py-6 eyebrow"
-              >
-                {checkingOut ? 'Processing...' : `Checkout — ₹${total.toFixed(2)}`}
-              </Button>
+                  <Button
+                    onClick={handleCheckoutSubmit}
+                    disabled={checkingOut}
+                    className="w-full bg-ink text-cream hover:bg-ink/90 py-6 eyebrow"
+                  >
+                    {checkingOut ? 'Processing...' : `Pay ₹${total.toFixed(2)}`}
+                  </Button>
 
-              <Link to="/shop">
-                <Button
-                  onClick={() => setIsCartOpen(false)}
-                  variant="outline"
-                  className="w-full border-ink/15 text-ink hover:bg-ink hover:text-cream eyebrow"
-                >
-                  Continue Shopping
-                </Button>
-              </Link>
+                  <Button
+                    onClick={() => setShowCheckoutForm(false)}
+                    variant="outline"
+                    className="w-full border-ink/15 text-ink hover:bg-ink hover:text-cream eyebrow"
+                  >
+                    Back to Cart
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="eyebrow text-ink/60">Subtotal</span>
+                    <span className="font-mono text-lg text-ink">₹{total.toFixed(2)}</span>
+                  </div>
+
+                  <div className="text-xs text-ink/50">
+                    Shipping calculated at checkout. Free shipping on orders over ₹500.
+                  </div>
+
+                  <Button
+                    onClick={handleCheckout}
+                    disabled={checkingOut}
+                    className="w-full bg-ink text-cream hover:bg-ink/90 py-6 eyebrow"
+                  >
+                    {checkingOut ? 'Processing...' : `Checkout — ₹${total.toFixed(2)}`}
+                  </Button>
+
+                  <Link to="/shop">
+                    <Button
+                      onClick={() => setIsCartOpen(false)}
+                      variant="outline"
+                      className="w-full border-ink/15 text-ink hover:bg-ink hover:text-cream eyebrow"
+                    >
+                      Continue Shopping
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </>
         )}

@@ -13,6 +13,7 @@ import ReturnPolicyPage from './pages/ReturnPolicyPage.jsx';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage.jsx';
 import ProductDetailPage from './pages/ProductDetailPage.jsx';
 import SuccessPage from './pages/SuccessPage.jsx';
+import OrderTrackingPage from './pages/OrderTrackingPage.jsx';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
@@ -66,6 +67,7 @@ function App() {
             <Route path="/privacy" element={<PrivacyPolicyPage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="/success" element={<SuccessPage />} />
+            <Route path="/order-tracking" element={<OrderTrackingPage />} />
 
             {/* Admin Auth Routes */}
             <Route path="/admin/login" element={<AdminLoginPage />} />
