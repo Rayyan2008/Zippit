@@ -102,6 +102,8 @@ export const initiateRazorpayPayment = async ({
       ondismiss: function () {
         onFailure?.('Payment cancelled by user');
       },
+      escape: false,
+      backdropclose: false,
     },
   };
 

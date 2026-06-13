@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
@@ -24,6 +24,12 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
   });
 
   const total = getCartTotal() || 0;
+
+  useEffect(() => {
+    if (!isCartOpen) {
+      setShowCheckoutForm(false);
+    }
+  }, [isCartOpen]);
 
   const handleCheckout = async () => {
     if (!cartItems || cartItems.length === 0) {
@@ -97,27 +103,31 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
   };
 
   return (
-    <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-      <SheetContent
-        side="right"
-        className="w-full sm:w-[480px] bg-cream text-ink border-l border-ink/10 p-0 flex flex-col"
-      >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-ink/10">
-          <div className="flex items-center gap-3">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="font-display text-2xl tracking-tightest">Your Bag</span>
+    <>
+      {checkingOut && (
+        <div className="fixed inset-0 z-[99990] pointer-events-auto bg-black/0" aria-hidden="true" />
+      )}
+      <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+        <SheetContent
+          side="right"
+          className="w-full sm:w-[480px] bg-cream text-ink border-l border-ink/10 p-0 flex flex-col"
+        >
+          <div className="flex items-center justify-between px-6 py-5 border-b border-ink/10">
+            <div className="flex items-center gap-3">
+              <ShoppingBag className="h-5 w-5" />
+              <span className="font-display text-2xl tracking-tightest">Your Bag</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(false)}
+              aria-label="Close cart"
+              className="inline-flex h-9 w-9 items-center justify-center transition hover:opacity-60"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => setIsCartOpen(false)}
-            aria-label="Close cart"
-            className="inline-flex h-9 w-9 items-center justify-center transition hover:opacity-60"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
-        {!cartItems || cartItems.length === 0 ? (
+          {!cartItems || cartItems.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
             <ShoppingBag className="h-16 w-16 text-ink/20 mb-6" />
             <h3 className="font-display text-2xl text-ink mb-3">Your bag is empty</h3>
@@ -353,8 +363,7 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
           </>
         )}
       </SheetContent>
-    </Sheet>
-  );
+    </Sheet>    </>  );
 };
 
 export default ShoppingCart;

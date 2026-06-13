@@ -23,6 +23,7 @@ export default function OrderTrackingPage() {
   const [searchBy, setSearchBy] = useState('order'); // 'order' or 'email'
   const [searchValue, setSearchValue] = useState('');
   const [order, setOrder] = useState(null);
+  const [matchingOrders, setMatchingOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -33,25 +34,27 @@ export default function OrderTrackingPage() {
     setLoading(true);
     setError(null);
     setOrder(null);
+    setMatchingOrders([]);
 
     try {
       const allOrders = await getOrders();
       
-      let found = null;
       if (searchBy === 'order') {
-        found = allOrders.find(o => o.order_number?.toUpperCase() === searchValue.toUpperCase());
+        const found = allOrders.find(o => o.order_number?.toUpperCase() === searchValue.toUpperCase());
         if (!found) {
           setError('Order not found. Please check the order number.');
+        } else {
+          setOrder(found);
         }
       } else {
-        found = allOrders.find(o => o.customer_email?.toLowerCase() === searchValue.toLowerCase());
-        if (!found) {
+        const matches = allOrders.filter(o => o.customer_email?.toLowerCase() === searchValue.toLowerCase());
+        if (matches.length === 0) {
           setError('No orders found for this email address.');
+        } else if (matches.length === 1) {
+          setOrder(matches[0]);
+        } else {
+          setMatchingOrders(matches);
         }
-      }
-
-      if (found) {
-        setOrder(found);
       }
     } catch (err) {
       setError('Failed to search orders. Please try again.');
@@ -139,6 +142,34 @@ export default function OrderTrackingPage() {
             {error && (
               <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm rounded">
                 {error}
+              </div>
+            )}
+
+            {matchingOrders.length > 0 && (
+              <div className="mt-6 rounded-2xl border border-ink/10 bg-parchment p-6">
+                <h2 className="font-display text-xl text-ink mb-4">Multiple orders found</h2>
+                <p className="text-sm text-ink/70 mb-4">
+                  We found more than one order for this email. Please select the correct order number below.
+                </p>
+                <div className="grid gap-3">
+                  {matchingOrders.map((match) => (
+                    <button
+                      key={match.id}
+                      type="button"
+                      onClick={() => { setOrder(match); setMatchingOrders([]); }}
+                      className="w-full rounded-2xl border border-ink/10 bg-cream px-4 py-4 text-left transition hover:border-ink/20 hover:bg-cream/90"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="font-display text-base text-ink">{match.order_number}</p>
+                          <p className="text-sm text-ink/60">{new Date(match.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                        </div>
+                        <span className="text-xs font-medium uppercase text-rouge">{match.status}</span>
+                      </div>
+                      <p className="mt-2 text-sm text-ink/70">₹{match.total?.toFixed(2)}</p>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>

@@ -27,6 +27,7 @@ import AdminInquiriesPage from './pages/AdminInquiriesPage';
 import AdminOrdersPage from './pages/AdminOrdersPage';
 import AdminSettingsPage from './pages/AdminSettingsPage';
 import AdminCustomersPage from './pages/AdminCustomersPage';
+import { Toaster } from './components/ui/toaster';
 
 function App() {
   const [commandOpen, setCommandOpen] = useState(false);
@@ -92,6 +93,7 @@ function App() {
               <Route path="settings" element={<AdminSettingsPage />} />
             </Route>
           </Routes>
+          <Toaster />
         </Router>
       </AuthProvider>
     </GoogleOAuthProvider>

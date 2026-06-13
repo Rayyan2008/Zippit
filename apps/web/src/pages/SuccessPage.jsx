@@ -62,6 +62,9 @@ const SuccessPage = () => {
                   Track Order
                 </Link>
               </Button>
+              <Button asChild className="bg-ink text-cream hover:bg-ink/90">
+                <Link to="/shop">Shop more</Link>
+              </Button>
               <Button asChild variant="outline" className="border-ink/15 text-ink hover:bg-ink hover:text-cream">
                 <Link to="/">Back Home</Link>
               </Button>
