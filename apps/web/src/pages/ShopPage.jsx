@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import Header from '../components/Header.jsx';
@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { products, categories } from '@/data/products.js';
+import { getProducts, getCategories } from '@/data/EcommerceApi';
 import { site } from '@/data/site.js';
 import { useTheme } from '@/components/ThemeToggle.jsx';
 
@@ -23,8 +23,34 @@ const ShopPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
-  const [priceRange, setPriceRange] = useState([0, 1500]);
+  const [priceRange, setPriceRange] = useState([0, 5000]);
   const { toggle: toggleTheme } = useTheme();
+
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState(['All']);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch products + categories from Supabase on mount
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const [{ products: prods }, cats] = await Promise.all([
+          getProducts(),
+          getCategories(),
+        ]);
+        setProducts(prods);
+        setCategories(cats);
+      } catch (e) {
+        setError('Failed to load products. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = [...products];
@@ -36,41 +62,35 @@ const ShopPage = () => {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(p =>
-        p.title.toLowerCase().includes(query) ||
-        p.description.toLowerCase().includes(query) ||
-        p.category.toLowerCase().includes(query)
+        p.title?.toLowerCase().includes(query) ||
+        p.description?.toLowerCase().includes(query) ||
+        p.category?.toLowerCase().includes(query)
       );
     }
 
     filtered = filtered.filter(p => {
-      const price = parseFloat(p.variants[0].price_formatted.replace(/[₹,]/g, ''));
+      const price = p.price ?? parseFloat(
+        (p.variants?.[0]?.price_formatted || '0').replace(/[₹,]/g, '')
+      );
       return price >= priceRange[0] && price <= priceRange[1];
     });
 
     if (sortBy === 'price-low') {
-      filtered.sort((a, b) => {
-        const priceA = parseFloat(a.variants[0].price_formatted.replace(/[₹,]/g, ''));
-        const priceB = parseFloat(b.variants[0].price_formatted.replace(/[₹,]/g, ''));
-        return priceA - priceB;
-      });
+      filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (sortBy === 'price-high') {
-      filtered.sort((a, b) => {
-        const priceA = parseFloat(a.variants[0].price_formatted.replace(/[₹,]/g, ''));
-        const priceB = parseFloat(b.variants[0].price_formatted.replace(/[₹,]/g, ''));
-        return priceB - priceA;
-      });
+      filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
     } else if (sortBy === 'rating') {
       filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     }
 
     return filtered;
-  }, [selectedCategory, searchQuery, sortBy, priceRange]);
+  }, [products, selectedCategory, searchQuery, sortBy, priceRange]);
 
   return (
     <>
       <Helmet>
         <title>{`Shop — ${site.brand.name}`}</title>
-        <meta name="description" content="Browse our collection of handmade ethnic pouches and organizers. Find the perfect pouch for your daily essentials, stationery, makeup, travel, and more." />
+        <meta name="description" content="Browse our collection of handmade ethnic pouches and organizers." />
       </Helmet>
 
       <ScrollProgress />
@@ -95,7 +115,14 @@ const ShopPage = () => {
             </p>
           </div>
 
+          {error && (
+            <div className="mb-8 bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm rounded">
+              {error}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+            {/* Sidebar filters */}
             <aside className="lg:col-span-3 space-y-8">
               <div>
                 <div className="flex items-center gap-2 mb-4">
@@ -141,15 +168,15 @@ const ShopPage = () => {
                 </div>
                 <Slider
                   min={0}
-                  max={1500}
-                  step={50}
+                  max={5000}
+                  step={100}
                   value={priceRange}
                   onValueChange={setPriceRange}
                   className="mb-2"
                 />
                 <div className="flex items-center justify-between text-xs text-ink/50">
                   <span>₹0</span>
-                  <span>₹1,500</span>
+                  <span>₹5,000</span>
                 </div>
               </div>
 
@@ -169,25 +196,36 @@ const ShopPage = () => {
               </div>
             </aside>
 
+            {/* Product grid */}
             <div className="lg:col-span-9">
               <div className="mb-8 flex items-center justify-between">
                 <div className="eyebrow text-ink/55">
-                  {filteredAndSortedProducts.length} product{filteredAndSortedProducts.length === 1 ? '' : 's'} found
+                  {loading ? 'Loading…' : `${filteredAndSortedProducts.length} product${filteredAndSortedProducts.length === 1 ? '' : 's'} found`}
                 </div>
               </div>
 
-              {filteredAndSortedProducts.length === 0 ? (
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-16">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="aspect-[3/4] bg-parchment mb-4" />
+                      <div className="h-4 bg-parchment rounded w-3/4 mb-2" />
+                      <div className="h-4 bg-parchment rounded w-1/2" />
+                    </div>
+                  ))}
+                </div>
+              ) : filteredAndSortedProducts.length === 0 ? (
                 <div className="py-20 text-center">
                   <Search className="h-16 w-16 text-ink/20 mx-auto mb-6" />
                   <h3 className="font-display text-2xl text-ink mb-3">No products found</h3>
                   <p className="text-sm text-ink/60 mb-8 max-w-md mx-auto">
-                    Try adjusting your filters or search query to find what you're looking for.
+                    Try adjusting your filters or search query.
                   </p>
                   <Button
                     onClick={() => {
                       setSelectedCategory('All');
                       setSearchQuery('');
-                      setPriceRange([0, 1500]);
+                      setPriceRange([0, 5000]);
                       setSortBy('default');
                     }}
                     className="bg-ink text-cream hover:bg-ink/90"
@@ -208,11 +246,7 @@ const ShopPage = () => {
 
         <Footer />
 
-        <ShoppingCart
-          isCartOpen={cartOpen}
-          setIsCartOpen={setCartOpen}
-        />
-
+        <ShoppingCart isCartOpen={cartOpen} setIsCartOpen={setCartOpen} />
         <CommandPalette
           open={paletteOpen}
           onOpenChange={setPaletteOpen}
