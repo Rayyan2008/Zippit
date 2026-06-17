@@ -9,9 +9,10 @@ export const site = {
     tagline: 'Handmade Accessories for Every Moment',
     description:
       'Discover unique handmade accessories—scrunchies, handbags, pouches, and organizers—crafted for students and young professionals. Each piece celebrates traditional Indian craftsmanship with modern functionality.',
-    domain: 'bloom.store',
-    email: 'hello@bloom.store',
-    address: 'Bloom Studio · New Delhi · Delhi · India',
+    domain: 'thebloomstore.in',
+    email: 'thebloomstore.in@gmail.com',
+
+    address: 'Bloom Studio, New Delhi, Delhi, India',
     phone: '+91 98765 43210',
     whatsapp: '919876543210',
     foundedYear: 2026,
