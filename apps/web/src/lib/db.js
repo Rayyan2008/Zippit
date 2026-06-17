@@ -1,5 +1,61 @@
 import { supabase } from './supabase.js';
 
+const PRODUCT_IMAGES_BUCKET = 'product-images';
+
+
+
+// Uploads a JPG product image to Supabase Storage and returns the public URL.
+export async function uploadProductImageToStorage(file, { productId } = {}) {
+  if (!file) throw new Error('No file provided');
+  if (file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+    throw new Error('Only JPG images are allowed');
+  }
+
+  const idPart = productId ? String(productId) : crypto.randomUUID();
+  const fileExt = 'jpg';
+  // Keep storage object path simple to avoid any bucket/path restrictions
+  const path = `${idPart}-${Date.now()}.${fileExt}`;
+
+
+  const normalizedContentType = file.type === 'image/jpg' ? 'image/jpeg' : file.type;
+
+  // Debug-friendly upload call (to diagnose Supabase Storage 400 responses)
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from(PRODUCT_IMAGES_BUCKET)
+    .upload(path, file, {
+      contentType: normalizedContentType,
+      upsert: true,
+      cacheControl: '3600',
+    });
+
+  if (uploadError) {
+    console.error('Supabase storage upload failed', {
+      bucket: PRODUCT_IMAGES_BUCKET,
+      path,
+      file: {
+        name: file?.name,
+        type: file?.type,
+        size: file?.size,
+      },
+      normalizedContentType,
+      uploadData,
+      error: {
+        name: uploadError?.name,
+        message: uploadError?.message,
+        statusCode: uploadError?.statusCode,
+        details: uploadError?.details,
+        hint: uploadError?.hint,
+      },
+    });
+    throw uploadError;
+  }
+
+
+  const { data } = supabase.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+
 // ============================================
 // PRODUCTS
 // ============================================
@@ -25,19 +81,31 @@ export async function createProduct(product) {
     name: product.name || product.title || null,
     title: product.title || product.name || null,
   };
+
+
+
   const { data, error } = await supabase.from('products').insert([payload]).select().single();
   if (error) throw error;
   return data;
 }
 
+
+
 export async function updateProduct(id, updates) {
   const payload = { ...updates };
   if (!payload.name && payload.title) payload.name = payload.title;
   if (!payload.title && payload.name) payload.title = payload.name;
+
+  // Keep image fields consistent
+  if (payload.images?.length && (!payload.image || typeof payload.image !== 'string')) {
+    payload.image = payload.images?.[0]?.url || null;
+  }
+
   const { data, error } = await supabase.from('products').update(payload).eq('id', id).select().single();
   if (error) throw error;
   return data;
 }
+
 
 export async function deleteProduct(id) {
   const { error } = await supabase.from('products').delete().eq('id', id);

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Trash2, Edit2, Plus, Package } from 'lucide-react';
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../lib/db';
+import { Trash2, Edit2, Plus, Package, Upload } from 'lucide-react';
+import { getProducts, createProduct, updateProduct, deleteProduct, uploadProductImageToStorage } from '../lib/db';
+
 
 const CATEGORIES = ['Daily Essentials', 'Stationery', 'Makeup', 'Travel', 'Coin', 'Ethnic'];
 
@@ -33,10 +34,37 @@ export default function AdminProductsPage() {
     finally { setLoading(false); }
   };
 
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
+
+  const handleImageFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
+      setError('Only JPG images are allowed');
+      return;
+    }
+
+    setError(null);
+    setSelectedImageFile(file);
+    setUploadingImage(true);
+    try {
+      const uploadedUrl = await uploadProductImageToStorage(file, { productId: editingId });
+      // Override URL field so submit uses the uploaded image.
+      setFormData(prev => ({ ...prev, image: uploadedUrl }));
+    } catch (err) {
+      setError(err.message || 'Image upload failed');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,12 +74,20 @@ export default function AdminProductsPage() {
     setSaving(true); setError(null);
     try {
       const payload = {
-        ...formData,
+        title: formData.title,
+        subtitle: formData.subtitle || null,
+        description: formData.description || null,
+        category: formData.category,
         price: Number(formData.price),
         sale_price: formData.sale_price ? Number(formData.sale_price) : null,
         stock_quantity: Number(formData.stock_quantity) || 0,
-        images: formData.image ? [{ url: formData.image }] : [],
+        ribbon_text: formData.ribbon_text || null,
+        image: formData.image || null,
+        is_featured: !!formData.is_featured,
+        is_active: !!formData.is_active,
       };
+
+
       if (editingId) {
         const updated = await updateProduct(editingId, payload);
         setProducts(prev => prev.map(p => p.id === editingId ? updated : p));
@@ -142,10 +178,29 @@ export default function AdminProductsPage() {
                   placeholder="0" className="border-ink/15 text-ink dark:text-cream dark:bg-card" />
               </div>
               <div>
-                <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-2">IMAGE URL</label>
-                <Input type="url" name="image" value={formData.image} onChange={handleInputChange}
-                  placeholder="https://..." className="border-ink/15 text-ink dark:text-cream dark:bg-card" />
+                <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-2">IMAGE (JPG)</label>
+                <Input
+                  type="file"
+                  accept="image/jpeg,image/jpg"
+                  onChange={handleImageFileChange}
+                  className="border-ink/15 text-ink dark:text-cream dark:bg-card"
+                />
+                {uploadingImage && (
+                  <div className="mt-2 text-xs text-ink/60 dark:text-cream/60">Uploading…</div>
+                )}
+                <div className="mt-4">
+                  <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-2">OR IMAGE URL</label>
+                  <Input
+                    type="url"
+                    name="image"
+                    value={formData.image}
+                    onChange={handleInputChange}
+                    placeholder="https://..."
+                    className="border-ink/15 text-ink dark:text-cream dark:bg-card"
+                  />
+                </div>
               </div>
+
               <div>
                 <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-2">RIBBON TEXT</label>
                 <Input name="ribbon_text" value={formData.ribbon_text} onChange={handleInputChange}
