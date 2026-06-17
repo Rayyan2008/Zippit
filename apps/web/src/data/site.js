@@ -119,7 +119,7 @@ export const site = {
   price: '₹299',
   cta: { label: 'Shop Now', href: '/shop' },
   image: {
-    src: 'public/Scrunchie.jpg',
+    src: '/Scrunchie.jpg',
     alt: 'Bloom signature scrunchie',
   },
     socialProof: '127 sold this month',
@@ -143,7 +143,7 @@ export const site = {
   body: 'Explore our collection of stylish accessories designed for everyday use. Swipe to discover.',
   images: [
     {
-      src: 'public/Scrunchie.jpg',
+      src: '/Scrunchie.jpg',
       title: 'Scrunchie Collection',
       caption: 'Comfort Meets Style',
     },
