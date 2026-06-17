@@ -119,7 +119,7 @@ export const site = {
   price: '₹299',
   cta: { label: 'Shop Now', href: '/shop' },
   image: {
-    src: 'public/scrunchie.jpg',
+    src: 'public/Scrunchie.jpg',
     alt: 'Bloom signature scrunchie',
   },
     socialProof: '127 sold this month',
