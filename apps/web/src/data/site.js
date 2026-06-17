@@ -13,7 +13,7 @@ export const site = {
     email: 'thebloomstore.in@gmail.com',
 
     address: 'Bloom Studio, New Delhi, Delhi, India',
-    phone: '+91 9319943790',
+    phone: '91 9319943790',
     whatsapp: '919319943790',
     foundedYear: 2026,
     taglineShort: 'Handmade, beautifully organized',

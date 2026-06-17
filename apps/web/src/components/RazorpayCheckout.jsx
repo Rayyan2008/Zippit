@@ -40,7 +40,7 @@ export const initiateRazorpayPayment = async ({
     currency: currency,
     name: 'Bloom',
     description: 'Handmade Ethnic Accessories',
-    image: '/logo.png',
+    image: '/favicon.png',
     prefill: {
       name: customerName || '',
       email: customerEmail || '',
