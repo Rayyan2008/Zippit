@@ -143,7 +143,7 @@ export const site = {
   body: 'Explore our collection of stylish accessories designed for everyday use. Swipe to discover.',
   images: [
     {
-      src: 'public/scrunchie.jpg',
+      src: 'public/Scrunchie.jpg',
       title: 'Scrunchie Collection',
       caption: 'Comfort Meets Style',
     },
