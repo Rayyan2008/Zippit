@@ -45,7 +45,7 @@ export default function AdminSignupPage() {
       <div className="w-full max-w-md">
         <div className="bg-white border border-ink/10 p-8">
           <h1 className="font-display text-3xl text-ink text-center mb-2">Create Account</h1>
-          <p className="text-center text-ink/60 eyebrow text-xs mb-8">ZIPPIT ADMIN PANEL</p>
+          <p className="text-center text-ink/60 eyebrow text-xs mb-8">BLOOM ADMIN PANEL</p>
 
           {error && <div className="mb-4 p-4 bg-rouge/10 border border-rouge/20 text-rouge text-sm">{error}</div>}
           {success && <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 text-sm">{success}</div>}
@@ -75,7 +75,7 @@ export default function AdminSignupPage() {
             </div>
             <div>
               <label className="block text-xs eyebrow text-ink/60 mb-1">EMAIL</label>
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@zippit.in" required className="border-ink/15 text-ink" />
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@bloom.in" required className="border-ink/15 text-ink" />
             </div>
             <div>
               <label className="block text-xs eyebrow text-ink/60 mb-1">PASSWORD</label>

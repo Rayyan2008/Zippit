@@ -74,7 +74,7 @@ export default function OrderTrackingPage() {
     <>
       <Helmet>
         <title>{`Track Order — ${site.brand.name}`}</title>
-        <meta name="description" content="Track your Zippit order status in real-time." />
+        <meta name="description" content="Track your Bloom order status in real-time." />
       </Helmet>
 
       <div className="min-h-screen bg-cream text-ink">
@@ -86,7 +86,7 @@ export default function OrderTrackingPage() {
               Track Your Order
             </h1>
             <p className="text-lg text-ink/70 max-w-xl mx-auto">
-              Enter your order number or email to see the current status of your Zippit order.
+              Enter your order number or email to see the current status of your Bloom order.
             </p>
           </div>
 

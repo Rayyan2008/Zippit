@@ -66,7 +66,7 @@ export default function AdminCouponsPage() {
             <div>
               <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-1">COUPON CODE *</label>
               <Input value={formData.code} onChange={e => setFormData(p => ({ ...p, code: e.target.value.toUpperCase() }))}
-                placeholder="e.g., ZIPPIT10" required className="border-ink/15 text-ink dark:text-cream dark:bg-card font-mono" />
+                placeholder="e.g., BLOOM10" required className="border-ink/15 text-ink dark:text-cream dark:bg-card font-mono" />
             </div>
             <div>
               <label className="block text-xs eyebrow text-ink/60 dark:text-cream/60 mb-1">TYPE</label>

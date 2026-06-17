@@ -20,32 +20,35 @@ const AboutPage = () => {
 
   const values = [
     {
-      icon: Heart,
-      title: 'Handmade with care',
-      description: 'Every pouch is crafted by skilled artisans using traditional techniques passed down through generations.',
-    },
-    {
-      icon: Users,
-      title: 'Fair trade practices',
-      description: 'We work directly with artisan communities, ensuring fair wages and sustainable livelihoods.',
-    },
-    {
-      icon: Leaf,
-      title: 'Eco-friendly materials',
-      description: 'Natural dyes, organic cotton, and sustainable materials are at the heart of our production.',
-    },
-    {
-      icon: Award,
-      title: 'Quality guaranteed',
-      description: 'Each piece undergoes rigorous quality checks to ensure it meets our high standards.',
-    },
+  icon: Heart,
+  title: 'Made with love',
+  description: 'Every Bloom piece is carefully handcrafted to bring style, comfort, and personality to your everyday life.',
+},
+{
+  icon: Users,
+  title: 'Designed for everyday use',
+  description: 'From college to work to travel, our accessories are created to be both practical and beautiful.',
+},
+{
+  icon: Leaf,
+  title: 'Thoughtfully crafted',
+  description: 'We focus on quality materials, attention to detail, and designs that are made to last.',
+},
+{
+  icon: Award,
+  title: 'Quality you can trust',
+  description: 'Every product is checked with care to ensure it meets our standards before reaching you.',
+},
   ];
 
   return (
     <>
       <Helmet>
         <title>{`About Us — ${site.brand.name}`}</title>
-        <meta name="description" content="Learn about Zippit's mission to create unique handmade ethnic pouches for college students and young professionals. Discover our story, values, and commitment to traditional craftsmanship." />
+        <meta
+          name="description"
+          content="Learn about Bloom's mission to create unique handmade accessories—scrunchies, handbags, pouches, and organizers—for students and young professionals. Discover our story, values, and commitment to traditional craftsmanship." 
+        />
       </Helmet>
 
       <ScrollProgress />
@@ -62,16 +65,16 @@ const AboutPage = () => {
           <section className="container mx-auto pt-20 md:pt-28 pb-20 md:pb-28">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               <div>
-                <div className="eyebrow text-rouge">About Zippit</div>
+                <div className="eyebrow text-rouge">About Bloom</div>
                 <h1 className="font-display text-display-lg text-ink mt-3 leading-[0.95]">
                   Handmade for life
                   <span className="text-rouge italic font-light">.</span>
                 </h1>
                 <p className="mt-6 text-lg text-ink/70 leading-relaxed">
-                  Zippit was founded in 2024 with a simple mission: to create unique handmade ethnic pouches that blend traditional Indian craftsmanship with modern functionality.
+                  Bloom was founded with a simple mission: to create unique handmade accessories that blend traditional Indian craftsmanship with modern functionality.
                 </p>
                 <p className="mt-4 text-lg text-ink/70 leading-relaxed">
-                  We partner with skilled artisans across Rajasthan, Gujarat, and West Bengal to bring you pouches that are not just organizers, but pieces of cultural heritage you can carry every day.
+                  We partner with skilled artisans across Delhi, Uttar Pradesh, and West Bengal to bring you scrunchies, handbags, pouches, and organizers that are not just practical, but pieces of cultural heritage you can carry every day.
                 </p>
                 <Link to="/shop">
                   <Button className="mt-8 bg-ink text-cream hover:bg-ink/90 eyebrow inline-flex items-center gap-2">
@@ -99,10 +102,10 @@ const AboutPage = () => {
                   From tradition to your hands
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed opacity-90">
-                  Growing up surrounded by the vibrant textiles and crafts of Rajasthan, our founder witnessed firsthand how traditional artisan skills were fading as younger generations moved to cities for work.
+                  Growing up surrounded by the vibrant textiles and crafts of India, our founder witnessed firsthand how traditional artisan skills were fading as younger generations moved to cities for work.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed opacity-90">
-                  Zippit was born from a desire to preserve these heritage techniques while creating products that fit modern lifestyles. We work with artisan cooperatives to ensure fair wages, provide training, and create sustainable income opportunities.
+                  Bloom was born from a desire to preserve these heritage techniques while creating products that fit modern lifestyles. We work with artisan cooperatives to ensure fair wages, provide training, and create sustainable income opportunities.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed opacity-90">
                   Today, we partner with 15+ artisan families, creating pouches that college students and young professionals love — not despite their traditional roots, but because of them.
@@ -159,7 +162,7 @@ const AboutPage = () => {
                 Join our journey
               </h2>
               <p className="text-lg text-ink/70 leading-relaxed mb-8">
-                Every Zippit pouch you purchase supports artisan families, preserves traditional crafts, and brings a piece of Indian heritage into your daily life.
+                Every Bloom product you purchase supports artisan families, preserves traditional crafts, and brings a piece of Indian heritage into your daily life.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/shop">

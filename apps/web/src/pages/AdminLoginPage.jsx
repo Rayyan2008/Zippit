@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-cream p-4">
       <div className="w-full max-w-md">
         <div className="bg-white border border-ink/10 p-8">
-          <h1 className="font-display text-3xl text-ink text-center mb-2">Zippit Admin</h1>
+          <h1 className="font-display text-3xl text-ink text-center mb-2">Bloom Admin</h1>
           <p className="text-center text-ink/60 eyebrow text-xs mb-8">SIGN IN TO MANAGE YOUR STORE</p>
 
           {error && (
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
             <div>
               <label className="block text-xs eyebrow text-ink/60 mb-1">EMAIL</label>
               <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@zippit.in" required disabled={isLoading}
+                placeholder="admin@bloom.in" required disabled={isLoading}
                 className="border-ink/15 text-ink" />
             </div>
             <div>

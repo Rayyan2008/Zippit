@@ -5,9 +5,9 @@ import { Trash2, MessageSquare, Mail, Phone, Clock, CheckCircle, AlertCircle, Se
 import { getInquiries, updateInquiry, deleteInquiry } from '../lib/db';
 
 const QUICK_REPLIES = [
-  { label: "We'll get back shortly", message: "Hi {name}! Thanks for reaching out to Zippit. We've received your inquiry and will get back to you shortly. 🙏" },
-  { label: "Reply in 24 hrs", message: "Hi {name}! Thank you for contacting Zippit. We'll respond within 24 hours. We appreciate your patience! 😊" },
-  { label: "Order on its way", message: "Hi {name}! Great news — your Zippit order is on its way! Thank you for shopping with us! 🎉" },
+  { label: "We'll get back shortly", message: "Hi {name}! Thanks for reaching out to Bloom. We've received your inquiry and will get back to you shortly. 🙏" },
+  { label: "Reply in 24 hrs", message: "Hi {name}! Thank you for contacting Bloom. We'll respond within 24 hours. We appreciate your patience! 😊" },
+  { label: "Order on its way", message: "Hi {name}! Great news — your Bloom order is on its way! Thank you for shopping with us! 🎉" },
   { label: "Need more info", message: "Hi {name}! Could you please share more details about your inquiry so we can assist you better? 🙏" },
   { label: "Item out of stock", message: "Hi {name}! Unfortunately this item is currently out of stock. We'll notify you as soon as it's available! 💛" },
   { label: "Refund processed", message: "Hi {name}! We've processed your refund. It should reflect in 5-7 business days. Sorry for the inconvenience! 🙏" },

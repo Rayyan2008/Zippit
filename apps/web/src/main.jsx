@@ -13,10 +13,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 window.requestAnimationFrame(() => {
   const loader = document.getElementById('velour-loader');
   if (!loader) return;
+  // Allow the wordmark letter animations to complete before fading the loader out.
   window.setTimeout(() => {
     loader.classList.add('loaded');
     window.setTimeout(() => {
       loader.parentNode && loader.parentNode.removeChild(loader);
     }, 700);
-  }, 700);
+  }, 1400);
 });

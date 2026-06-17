@@ -288,11 +288,13 @@ export const products = [
   // Ethnic Handmade Pouches
   {
     id: 'ethnic-001',
-    title: 'Traditional Block Print Pouch',
+    title: 'Traditional Block Print Scrunchie',
     subtitle: 'Heritage craftsmanship',
     category: 'Ethnic',
-    description: 'Premium handmade pouch featuring authentic Rajasthani block printing. Each piece is hand-stamped by skilled artisans using natural dyes. Lined with soft cotton for durability.',
-    image: 'https://images.unsplash.com/photo-1694126741743-85352d7e500a?auto=format&fit=crop&w=800&q=85',
+
+    description: 'Premium handmade scrunchie featuring authentic  block printing. Each piece is hand-stamped by skilled artisans using natural dyes. Designed to be gentle on hair with a comfortable, secure fit.',
+    image: '/Scrunchie.jpg',
+
     images: [
       { url: 'https://images.unsplash.com/photo-1694126741743-85352d7e500a?auto=format&fit=crop&w=800&q=85' },
       { url: 'https://images.unsplash.com/photo-1648031449118-a3d7517d2f72?auto=format&fit=crop&w=800&q=85' }

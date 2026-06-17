@@ -4,18 +4,18 @@ dropDate.setHours(12, 0, 0, 0);
 
 export const site = {
   brand: {
-    name: 'Zippit',
-    wordmark: 'ZIPPIT',
-    tagline: 'Handmade Ethnic Pouches for Every Moment',
+    name: 'Bloom',
+    wordmark: 'BLOOM',
+    tagline: 'Handmade Accessories for Every Moment',
     description:
-      'Discover unique handmade ethnic pouches and organizers crafted for college students and young professionals. Each piece celebrates traditional Indian craftsmanship with modern functionality.',
-    domain: 'zippit.store',
-    email: 'hello@zippit.store',
-    address: 'Zippit Studio · Jaipur · Rajasthan · India',
+      'Discover unique handmade accessories—scrunchies, handbags, pouches, and organizers—crafted for students and young professionals. Each piece celebrates traditional Indian craftsmanship with modern functionality.',
+    domain: 'bloom.store',
+    email: 'hello@bloom.store',
+    address: 'Bloom Studio · New Delhi · Delhi · India',
     phone: '+91 98765 43210',
     whatsapp: '919876543210',
-    foundedYear: 2024,
-    taglineShort: 'Organize with culture',
+    foundedYear: 2026,
+    taglineShort: 'Handmade, beautifully organized',
   },
 
   drop: {
@@ -55,16 +55,16 @@ export const site = {
     stack: ['Organize', 'Your', 'Life'],
     bigWord: 'Life',
     body:
-      'Handcrafted pouches and organizers that blend traditional Indian artistry with modern functionality. Perfect for students, professionals, and anyone who values quality craftsmanship.',
+      'Handcrafted scrunchies, pouches, handbags, and organizers that blend traditional Indian artistry with modern functionality. Perfect for students, professionals, and anyone who values quality craftsmanship.',
     primaryCta: { label: 'Shop Collection', href: '/shop' },
     secondaryCta: { label: 'Our Story', href: '/about' },
     image: {
       src: 'https://images.unsplash.com/photo-1694126741743-85352d7e500a?auto=format&fit=crop&w=1600&q=85',
-      alt: 'Zippit handmade ethnic pouches collection',
+      alt: 'Bloom handmade accessories collection',
     },
     secondaryImage: {
       src: 'https://images.unsplash.com/photo-1648031449118-a3d7517d2f72?auto=format&fit=crop&w=1200&q=85',
-      alt: 'Traditional block print pouch detail',
+      alt: 'Handmade Scrunchie detail',
     },
   },
 
@@ -106,80 +106,82 @@ export const site = {
   ],
 
   spotlight: {
-    eyebrow: 'Featured Product',
-    title: ['Traditional', 'Block Print', 'Pouch'],
-    body:
-      'Hand-stamped by skilled artisans using authentic Rajasthani block printing techniques. Each piece is unique, featuring natural dyes and traditional motifs passed down through generations.',
-    bullets: [
-      'Authentic Rajasthani block printing',
-      'Natural dyes, eco-friendly materials',
-      'Hand-stamped by skilled artisans',
-      'Free shipping on orders over ₹500',
-    ],
-    price: '₹1,299',
-    cta: { label: 'Add to Cart', href: '/shop' },
-    image: {
-      src: 'https://images.unsplash.com/photo-1694126741743-85352d7e500a?auto=format&fit=crop&w=1400&q=85',
-      alt: 'Traditional block print pouch with ethnic motifs',
-    },
+  eyebrow: 'Best Seller',
+  title: ['Bloom', 'Signature', 'Scrunchie'],
+  body:
+    'Designed for comfort, style, and everyday wear. Our signature scrunchies are crafted from soft premium fabrics that hold your hair securely without pulling or damage.',
+  bullets: [
+    'Gentle on all hair types',
+    'Soft premium fabric',
+    'Comfortable all-day hold',
+    'Free shipping on orders over ₹500',
+  ],
+  price: '₹299',
+  cta: { label: 'Shop Now', href: '/shop' },
+  image: {
+    src: 'public/scrunchie.jpg',
+    alt: 'Bloom signature scrunchie',
+  },
     socialProof: '127 sold this month',
   },
+
+
 
   editorial: {
     eyebrow: 'Our Philosophy',
     quote: 'Every stitch tells a story. Every pattern preserves a tradition.',
-    attribution: 'The Zippit Promise',
+    attribution: 'The Bloom Promise',
     paragraphs: [
-      'We partner with skilled artisans across India to create pouches that honor traditional craftsmanship while serving modern needs. Each piece is handmade with care, ensuring quality and uniqueness.',
-      'From college students organizing their stationery to young professionals keeping their essentials tidy, Zippit pouches bring cultural authenticity to everyday organization.',
+      'We partner with skilled artisans across India to create accessories that honor traditional craftsmanship while serving modern needs. Each piece is handmade with care, ensuring quality and uniqueness.',
+      'From students organizing their everyday essentials to young professionals keeping their items tidy, Bloom accessories bring cultural authenticity to daily organization.',
     ],
   },
 
   lookbook: {
-    eyebrow: 'Our Collection',
-    title: 'Handmade for you',
-    body: 'Explore our range of handcrafted pouches and organizers. Swipe to discover.',
-    images: [
-      {
-        src: 'https://images.unsplash.com/photo-1694126741743-85352d7e500a?auto=format&fit=crop&w=1200&q=85',
-        title: 'Ethnic Collection',
-        caption: 'Traditional Block Print Pouches',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1648031449118-a3d7517d2f72?auto=format&fit=crop&w=1200&q=85',
-        title: 'Daily Essentials',
-        caption: 'Everyday Organizers',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1617121758076-fe4d2e5158ae?auto=format&fit=crop&w=1200&q=85',
-        title: 'Travel Ready',
-        caption: 'Weekend Travel Pouches',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1629772702781-1986a33d7fba?auto=format&fit=crop&w=1200&q=85',
-        title: 'Makeup & Beauty',
-        caption: 'Cosmetic Organizers',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1618111415464-62013acf8656?auto=format&fit=crop&w=1200&q=85',
-        title: 'For Students',
-        caption: 'Stationery Pouches',
-      },
-      {
-        src: 'https://images.unsplash.com/photo-1565845135776-05e8c90a936f?auto=format&fit=crop&w=1200&q=85',
-        title: 'Compact & Cute',
-        caption: 'Coin Pouches',
-      },
-    ],
-  },
+  eyebrow: 'Our Collection',
+  title: 'Made to Bloom',
+  body: 'Explore our collection of stylish accessories designed for everyday use. Swipe to discover.',
+  images: [
+    {
+      src: 'public/scrunchie.jpg',
+      title: 'Scrunchie Collection',
+      caption: 'Comfort Meets Style',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1648031449118-a3d7517d2f72?auto=format&fit=crop&w=1200&q=85',
+      title: 'Daily Essentials',
+      caption: 'Accessories for Everyday Use',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1617121758076-fe4d2e5158ae?auto=format&fit=crop&w=1200&q=85',
+      title: 'Hair Accessories',
+      caption: 'Stylish Looks for Every Occasion',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1629772702781-1986a33d7fba?auto=format&fit=crop&w=1200&q=85',
+      title: 'Beauty Collection',
+      caption: 'Fashion & Lifestyle Essentials',
+    },
+    {
+      src: '/Vision.jpg',
+      title: 'Student Favorites',
+      caption: 'Practical Everyday Accessories',
+    },
+    {
+      src: '/display.jpg',
+      title: 'Bloom Favorites',
+      caption: 'Customer Best Sellers',
+    },
+  ],
+},
 
   story: {
-    eyebrow: 'About Zippit',
+    eyebrow: 'About Bloom',
     title: ['Handmade', 'with heart'],
     body:
-      'Zippit was founded to bridge the gap between traditional Indian craftsmanship and modern organizational needs. We work directly with artisan communities across Rajasthan, Gujarat, and West Bengal to create pouches that are both beautiful and functional.',
+      'Bloom was founded to bridge the gap between traditional Indian craftsmanship and modern organizational needs. We work directly with artisan communities across Rajasthan, Gujarat, and West Bengal to create pouches that are both beautiful and functional.',
     secondaryBody:
-      'Every Zippit pouch is handmade by skilled artisans using techniques passed down through generations. We believe in fair wages, sustainable materials, and preserving cultural heritage through contemporary design.',
+      'Every Bloom pouch is handmade by skilled artisans using techniques passed down through generations. We believe in fair wages, sustainable materials, and preserving cultural heritage through contemporary design.',
     cta: { label: 'Read Our Story', href: '/about' },
     image: {
       src: 'https://images.unsplash.com/photo-1527385352018-3c26dd6c3916?auto=format&fit=crop&w=1400&q=85',
@@ -195,8 +197,8 @@ export const site = {
 
   faq: [
     {
-      q: 'What makes Zippit pouches special?',
-      a: 'Each Zippit pouch is handmade by skilled artisans using traditional Indian techniques like block printing, hand weaving, and embroidery. We use natural dyes and sustainable materials, ensuring every piece is unique and eco-friendly.',
+    q: 'What makes Bloom handmade accessories special?',
+      a: 'Each Bloom piece is handmade by skilled artisans using traditional Indian techniques like block printing, hand weaving, and embroidery. We use natural dyes and sustainable materials, ensuring every piece is unique and eco-friendly.',
     },
     {
       q: 'How long does shipping take?',
@@ -207,11 +209,11 @@ export const site = {
       a: 'We offer a 7-day return window from the date of delivery. Items must be unused with original tags attached. Simply contact us to initiate a return, and we will provide a prepaid return label.',
     },
     {
-      q: 'Can I customize my pouch?',
-      a: 'Yes! We offer customization options for bulk orders (10+ pieces). Contact us at hello@zippit.store with your requirements, and our team will work with you to create custom designs.',
+      q: 'Can I customize my Handbags?',
+      a: 'Yes! We offer customization options for bulk orders (10+ pieces). Contact us at thebloomstore.in@gmail.com with your requirements, and our team will work with you to create custom designs.',
     },
     {
-      q: 'Are the pouches machine washable?',
+      q: 'Are the Scrunchies machine washable?',
       a: 'We recommend hand washing with cold water and mild detergent to preserve the colors and fabric quality. Avoid wringing or twisting. Air dry in shade to maintain the integrity of natural dyes.',
     },
     {
@@ -240,7 +242,7 @@ export const site = {
           { label: 'Daily Essentials', href: '/shop?category=Daily+Essentials' },
           { label: 'Stationery', href: '/shop?category=Stationery' },
           { label: 'Makeup Pouches', href: '/shop?category=Makeup' },
-          { label: 'Travel Organizers', href: '/shop?category=Travel' },
+          { label: 'Handbags', href: '/shop?category=Handbags' },
           { label: 'Ethnic Collection', href: '/shop?category=Ethnic' },
         ],
       },
@@ -284,11 +286,11 @@ export const site = {
     title: 'Contact us',
     body:
       'Have questions? We\'re here to help. Reach out via the form below or WhatsApp us directly.',
-    email: 'hello@zippit.store',
+    email: 'thebloomstore.in@gmail.com',
     phone: '+91 98765 43210',
     whatsapp: '919876543210',
-    hours: 'Monday - Saturday · 10 AM - 6 PM IST',
-    address: 'Zippit Studio, Jaipur, Rajasthan, India',
+    hours: 'Monday - Saturday · 9 AM - 7 PM IST',
+    address: 'Bloom Studio, New Delhi, Delhi, India',
   },
 };
 

@@ -91,7 +91,7 @@ const CommandPalette = ({ open, onOpenChange, onOpenCart, onToggleTheme }) => {
               autoFocus
               value={search}
               onValueChange={setSearch}
-              placeholder="Search ZIPPIT — pieces, sections, actions…"
+              placeholder="Search BLOOM — pieces, sections, actions…"
               className="flex-1 bg-transparent text-base text-ink placeholder:text-ink/40 focus:outline-none"
             />
             <kbd className="hidden sm:inline-flex h-6 items-center px-2 font-mono text-[10px] uppercase tracking-[0.2em] border border-ink/15 text-ink/60">

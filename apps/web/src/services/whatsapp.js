@@ -45,7 +45,7 @@ export const sendWhatsAppMessage = async (phoneNumber, message) => {
 };
 
 export const sendOrderStatusNotification = (customerPhone, orderId, status) => {
-  const message = `Hi! Your Zippit order #${orderId} status is now: ${status}. Thank you for shopping with us!`;
+  const message = `Hi! Your Bloom order #${orderId} status is now: ${status}. Thank you for shopping with us!`;
   return sendWhatsAppMessage(customerPhone, message);
 };
 

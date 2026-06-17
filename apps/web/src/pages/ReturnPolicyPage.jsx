@@ -20,7 +20,7 @@ const ReturnPolicyPage = () => {
     <>
       <Helmet>
         <title>{`Return & Exchange Policy — ${site.brand.name}`}</title>
-        <meta name="description" content="Learn about Zippit's return and exchange policy. Easy 7-day returns on handmade ethnic pouches with clear guidelines and process." />
+        <meta name="description" content="Learn about Bloom's return and exchange policy. Easy 7-day returns on handmade ethnic handbags, pouches and scrunchies with clear guidelines and process." />
       </Helmet>
 
       <ScrollProgress />
@@ -138,7 +138,7 @@ const ReturnPolicyPage = () => {
                 </p>
                 <ol className="mt-4 space-y-4 text-ink/70">
                   <li className="pl-2">
-                    <span className="font-semibold text-ink">Step 1:</span> Contact us at hello@zippit.store with your order number, reason for return, and photos of the item (if applicable).
+                    <span className="font-semibold text-ink">Step 1:</span> Contact us at thebloomstore.in@gmail.com with your order number, reason for return, and photos of the item (if applicable).
                   </li>
                   <li className="pl-2">
                     <span className="font-semibold text-ink">Step 2:</span> Our team will review your request within 24 hours and provide a prepaid return shipping label via email.

@@ -59,7 +59,7 @@ const ContactPage = () => {
     <>
       <Helmet>
         <title>{`Contact Us — ${site.brand.name}`}</title>
-        <meta name="description" content="Get in touch with Zippit. We're here to help with any questions about our handmade ethnic pouches, orders, or custom requests." />
+        <meta name="description" content="Get in touch with Bloom. We're here to help with any questions about our handmade ethnic pouches, orders, or custom requests." />
       </Helmet>
 
       <ScrollProgress />

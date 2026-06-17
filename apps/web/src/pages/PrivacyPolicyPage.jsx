@@ -55,7 +55,7 @@ const PrivacyPolicyPage = () => {
               </div>
               <div className="prose prose-lg max-w-none">
                 <p className="text-ink/70 leading-relaxed">
-                  At Zippit, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and make purchases.
+                  At Bloom, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and make purchases.
                 </p>
                 <p className="text-ink/70 leading-relaxed mt-4">
                   By using our website, you consent to the data practices described in this policy. If you do not agree with this policy, please do not use our website.
@@ -208,7 +208,7 @@ const PrivacyPolicyPage = () => {
                   </li>
                 </ul>
                 <p className="text-ink/70 leading-relaxed mt-6">
-                  To exercise any of these rights, please contact us at hello@zippit.store. We will respond to your request within 30 days.
+                  To exercise any of these rights, please contact us at thebloomstore.in@gmail.com. We will respond to your request within 30 days.
                 </p>
               </div>
             </section>

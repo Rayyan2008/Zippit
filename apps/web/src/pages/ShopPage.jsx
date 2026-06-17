@@ -111,7 +111,7 @@ const ShopPage = () => {
               <span className="text-rouge italic font-light">.</span>
             </h1>
             <p className="mt-5 text-lg text-ink/70 leading-relaxed max-w-2xl">
-              Explore our complete range of handcrafted ethnic pouches and organizers. Each piece is made with care by skilled artisans.
+              Explore our complete range of handcrafted ethnic handbags, pouches, scrunchies and organizers. Each piece is made with care by skilled artisans.
             </p>
           </div>
 

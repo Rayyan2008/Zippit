@@ -38,8 +38,8 @@ export const initiateRazorpayPayment = async ({
     key: 'rzp_test_T0iuJ3LtuWvQXF',
     amount: Math.round(amount * 100),
     currency: currency,
-    name: 'Zippit',
-    description: 'Handmade Ethnic Pouches',
+    name: 'Bloom',
+    description: 'Handmade Ethnic Accessories',
     image: '/logo.png',
     prefill: {
       name: customerName || '',

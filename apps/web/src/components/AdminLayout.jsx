@@ -44,7 +44,7 @@ export default function AdminLayout() {
             to="/"
             className="font-display text-2xl tracking-tightest text-ink hover:text-rouge transition-colors duration-300"
           >
-            ZIPPIT
+            Bloom
           </Link>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}

@@ -44,10 +44,10 @@ export default function AdminOrdersPage() {
       // Send WhatsApp notification to customer
       if (order?.customer_phone) {
         const statusMessages = {
-          'Confirmed': `🎉 Great! Your Zippit order ${order.order_number} has been confirmed. We'll process it shortly.`,
+          'Confirmed': `🎉 Great! Your BLOOM order ${order.order_number} has been confirmed. We'll process it shortly.`,
           'Processing': `📦 Your order ${order.order_number} is being processed. We're preparing your items!`,
           'Shipped': `🚚 Your order ${order.order_number} has been shipped! Track it here: ${window.location.origin}/order-tracking`,
-          'Delivered': `✨ Your Zippit order ${order.order_number} has been delivered! Thank you for shopping with us! 💛`,
+          'Delivered': `✨ Your BLOOM order ${order.order_number} has been delivered! Thank you for shopping with us! 💛`,
           'Cancelled': `❌ Your order ${order.order_number} has been cancelled. Please contact support for assistance.`,
         };
         

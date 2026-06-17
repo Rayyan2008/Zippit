@@ -20,7 +20,7 @@ const ShippingPolicyPage = () => {
     <>
       <Helmet>
         <title>{`Shipping Policy — ${site.brand.name}`}</title>
-        <meta name="description" content="Learn about Zippit's shipping policy, delivery timelines, costs, and tracking information for handmade ethnic pouches across India." />
+        <meta name="description" content="Learn about Bloom's shipping policy, delivery timelines, costs, and tracking information for handmade ethnic pouches across India." />
       </Helmet>
 
       <ScrollProgress />
@@ -100,7 +100,7 @@ const ShippingPolicyPage = () => {
                   Once your order ships, you will receive a shipping confirmation email with a tracking number. You can use this number to track your package on our shipping partner's website.
                 </p>
                 <p className="text-ink/70 leading-relaxed mt-4">
-                  Tracking information is typically updated within 24 hours of shipment. If you experience any issues with tracking or have questions about your delivery, please contact us at hello@zippit.store.
+                  Tracking information is typically updated within 24 hours of shipment. If you experience any issues with tracking or have questions about your delivery, please contact us at thebloomstore.in@gmail.com
                 </p>
               </div>
             </section>
@@ -114,7 +114,7 @@ const ShippingPolicyPage = () => {
               </div>
               <div className="prose prose-lg max-w-none">
                 <p className="text-ink/70 leading-relaxed">
-                  Each Zippit pouch is handmade by skilled artisans and requires special care during shipping. We use eco-friendly packaging materials and ensure each item is carefully wrapped to prevent damage during transit.
+                  Each Bloom product is handmade by skilled artisans and requires special care during shipping. We use eco-friendly packaging materials and ensure each item is carefully wrapped to prevent damage during transit.
                 </p>
                 <p className="text-ink/70 leading-relaxed mt-4">
                   Our packaging is designed to protect your pouch while minimizing environmental impact. We use recycled cardboard boxes, biodegradable packing materials, and minimal plastic.
@@ -137,10 +137,10 @@ const ShippingPolicyPage = () => {
                   Orders are processed Monday through Saturday, excluding public holidays. Orders placed after 2 PM IST will be processed the next business day.
                 </p>
                 <p className="text-ink/70 leading-relaxed mt-4">
-                  You will receive an order confirmation email immediately after placing your order. A separate shipping confirmation email with tracking information will be sent once your order ships.
+                  You will receive an order confirmation message immediately after confiriming your order. A separate shipping confirmation email with tracking information will be sent once your order ships.
                 </p>
                 <p className="text-ink/70 leading-relaxed mt-4">
-                  If you need to modify or cancel your order, please contact us immediately at hello@zippit.store. We cannot guarantee changes once the order has been processed for shipment.
+                  If you need to modify or cancel your order, please contact us immediately at thebloomstore.in@gmail.com. We cannot guarantee changes once the order has been processed for shipment.
                 </p>
               </div>
             </section>
