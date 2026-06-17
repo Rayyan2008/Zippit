@@ -13,8 +13,8 @@ export const site = {
     email: 'thebloomstore.in@gmail.com',
 
     address: 'Bloom Studio, New Delhi, Delhi, India',
-    phone: '+91 98765 43210',
-    whatsapp: '919876543210',
+    phone: '+91 9319943790',
+    whatsapp: '919319943790',
     foundedYear: 2026,
     taglineShort: 'Handmade, beautifully organized',
   },
@@ -64,7 +64,7 @@ export const site = {
       alt: 'Bloom handmade accessories collection',
     },
     secondaryImage: {
-      src: 'https://images.unsplash.com/photo-1648031449118-a3d7517d2f72?auto=format&fit=crop&w=1200&q=85',
+      src: 'https://images.unsplash.com/photo-1648031449118-a3d7517d2f72?auto=format&fit=crop&w=800&q=85',
       alt: 'Handmade Scrunchie detail',
     },
   },
@@ -149,17 +149,17 @@ export const site = {
       caption: 'Comfort Meets Style',
     },
     {
-      src: 'https://images.unsplash.com/photo-1648031449118-a3d7517d2f72?auto=format&fit=crop&w=1200&q=85',
+      src: 'public/red.jpg',
       title: 'Daily Essentials',
       caption: 'Accessories for Everyday Use',
     },
     {
-      src: 'https://images.unsplash.com/photo-1617121758076-fe4d2e5158ae?auto=format&fit=crop&w=1200&q=85',
+      src: 'public/book.jpg',
       title: 'Hair Accessories',
       caption: 'Stylish Looks for Every Occasion',
     },
     {
-      src: 'https://images.unsplash.com/photo-1629772702781-1986a33d7fba?auto=format&fit=crop&w=1200&q=85',
+      src: 'public/green.jpg',
       title: 'Beauty Collection',
       caption: 'Fashion & Lifestyle Essentials',
     },
@@ -185,7 +185,7 @@ export const site = {
       'Every Bloom pouch is handmade by skilled artisans using techniques passed down through generations. We believe in fair wages, sustainable materials, and preserving cultural heritage through contemporary design.',
     cta: { label: 'Read Our Story', href: '/about' },
     image: {
-      src: 'https://images.unsplash.com/photo-1527385352018-3c26dd6c3916?auto=format&fit=crop&w=1400&q=85',
+      src: 'public/banner.jpg',
       alt: 'Artisan crafting traditional embroidered pouch',
     },
     stats: [
@@ -272,7 +272,7 @@ export const site = {
       { name: 'Instagram', href: '#', short: 'IG' },
       { name: 'Facebook', href: '#', short: 'FB' },
       { name: 'Pinterest', href: '#', short: 'PIN' },
-      { name: 'WhatsApp', href: 'https://wa.me/919876543210', short: 'WA' },
+      { name: 'WhatsApp', href: 'https://wa.me/919319943790', short: 'WA' },
     ],
     legal: [
       { label: 'Privacy Policy', href: '/privacy' },
@@ -288,8 +288,8 @@ export const site = {
     body:
       'Have questions? We\'re here to help. Reach out via the form below or WhatsApp us directly.',
     email: 'thebloomstore.in@gmail.com',
-    phone: '+91 98765 43210',
-    whatsapp: '919876543210',
+    phone: '+91 9319943790',
+    whatsapp: '919319943790',
     hours: 'Monday - Saturday · 9 AM - 7 PM IST',
     address: 'Bloom Studio, New Delhi, Delhi, India',
   },
