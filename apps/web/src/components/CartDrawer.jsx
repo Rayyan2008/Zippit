@@ -141,7 +141,17 @@ const CartDrawer = ({ open, onOpenChange }) => {
                           </button>
                         </div>
                         <div className="font-mono text-sm">
-                          {formatCurrency(item.price * item.quantity)}
+                          {(() => {
+                            // Just one price: prefer sale/discount if present, otherwise original.
+                            const cents = item.variant?.sale_price_in_cents ?? item.variant?.price_in_cents;
+                            if (cents !== undefined) {
+                              return formatCurrency((cents / 100) * item.quantity);
+                            }
+
+                            const priceFormatted = item.variant?.price_formatted ?? '';
+                            const price = parseFloat(String(priceFormatted).replace(/[^\d.]/g, '')) || item.product?.price || 0;
+                            return formatCurrency(price * item.quantity);
+                          })()}
                         </div>
                       </div>
                     </div>

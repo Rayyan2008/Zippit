@@ -183,7 +183,19 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
                   const product = item.product || {};
                   const variant = item.variant || {};
                   const key = `${product.id || index}-${variant.title || 'default'}`;
-                  const priceDisplay = variant.price_formatted || (product.price ? `₹${product.price}` : 'Price unavailable');
+                  const effectivePriceDisplay = (() => {
+                    // Single price: prefer sale/discount if present, otherwise original.
+                    const cents = variant?.sale_price_in_cents ?? variant?.price_in_cents;
+                    if (cents !== undefined) {
+                      return `₹${(cents / 100).toFixed(0)}`;
+                    }
+
+                    const formatted = variant?.sale_price_formatted || variant?.price_formatted;
+                    if (formatted) return formatted;
+
+                    if (product?.price !== undefined) return `₹${product.price}`;
+                    return 'Price unavailable';
+                  })();
                   
                   return (
                     <li key={key} className="flex gap-4">
@@ -251,7 +263,7 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
                             </button>
                           </div>
                           <div className="font-mono text-sm text-ink">
-                            {priceDisplay}
+                            {effectivePriceDisplay}
                           </div>
                         </div>
                       </div>

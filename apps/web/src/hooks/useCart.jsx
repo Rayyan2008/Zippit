@@ -71,10 +71,11 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const getCartTotal = useCallback(() => {
+    // Total should be the SELL price the customer pays (sale price when available)
     return cartItems.reduce((total, item) => {
       const variant = item.variant || item.product?.variants?.[0] || {};
       let price = 0;
-      
+
       if (variant.sale_price_in_cents !== undefined || variant.price_in_cents !== undefined) {
         price = (variant.sale_price_in_cents ?? variant.price_in_cents ?? 0) / 100;
       } else if (variant.price_formatted) {
@@ -82,8 +83,7 @@ export const CartProvider = ({ children }) => {
       } else if (item.product?.price) {
         price = parseFloat(String(item.product.price).replace(/[^\d.]/g, '')) || 0;
       }
-      
-      // Use the variant's effective price (sale if available) instead of product MRP
+
       const quantity = item.quantity || 1;
       return total + price * quantity;
     }, 0);
