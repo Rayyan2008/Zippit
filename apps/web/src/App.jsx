@@ -27,7 +27,9 @@ import AdminInquiriesPage from './pages/AdminInquiriesPage';
 import AdminOrdersPage from './pages/AdminOrdersPage';
 import AdminSettingsPage from './pages/AdminSettingsPage';
 import AdminCustomersPage from './pages/AdminCustomersPage';
+import NotFoundPage from './pages/NotFoundPage.jsx';
 import { Toaster } from './components/ui/toaster';
+
 
 function App() {
   const [commandOpen, setCommandOpen] = useState(false);
@@ -92,6 +94,9 @@ function App() {
               <Route path="customers" element={<AdminCustomersPage />} />
               <Route path="settings" element={<AdminSettingsPage />} />
             </Route>
+
+            {/* Not Found */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <Toaster />
         </Router>
@@ -101,3 +106,4 @@ function App() {
 }
 
 export default App;
+
