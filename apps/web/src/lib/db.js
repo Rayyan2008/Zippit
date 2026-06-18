@@ -187,9 +187,23 @@ export async function deleteOrder(id) {
 
 
 export async function resetDashboardData() {
-  const { error: historyError } = await supabase.from('order_status_history').delete();
+  // Supabase schema cache errors can occur when the RPC name/casing doesn't match.
+  // Try the exact name first.
+  const rpcName = 'Reset dashboard';
+
+  const { data: rpcData, error: rpcError } = await supabase.rpc(rpcName);
+  if (!rpcError) return true;
+
+  // Fallback: if RPC fails, attempt REST delete with a simple non-null predicate.
+  // (This avoids the earlier UUID/null casting issues as much as possible.)
+  const { error: historyError } = await supabase
+    .from('order_status_history')
+    .delete()
+    .not('order_id', 'is', null);
+
   if (historyError) throw historyError;
 
+  // If both approaches fail, the original rpcError is informative.
   return true;
 }
 
