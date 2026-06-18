@@ -65,8 +65,8 @@ const StorySection = () => {
                 className="absolute inset-0 h-full w-full object-cover"
               />
               <div className="absolute inset-x-0 bottom-0 p-5 flex justify-between text-cream">
-                <span className="eyebrow drop-shadow">Atelier</span>
-                <span className="eyebrow drop-shadow">Porto · Florence · Paris</span>
+                <span className="eyebrow drop-shadow">Made </span>
+                <span className="eyebrow drop-shadow">with · Indian · Craftmanship</span>
               </div>
             </div>
           </div>
