@@ -149,17 +149,17 @@ export const site = {
       caption: 'Comfort Meets Style',
     },
     {
-      src: 'public/red.jpg',
+      src: '/red.jpg',
       title: 'Daily Essentials',
       caption: 'Accessories for Everyday Use',
     },
     {
-      src: 'public/book.jpg',
+      src: '/book.jpg',
       title: 'Hair Accessories',
       caption: 'Stylish Looks for Every Occasion',
     },
     {
-      src: 'public/green.jpg',
+      src: '/green.jpg',
       title: 'Beauty Collection',
       caption: 'Fashion & Lifestyle Essentials',
     },
