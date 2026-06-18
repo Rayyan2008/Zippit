@@ -40,21 +40,25 @@ export default function AdminOrdersPage() {
     try {
       const order = orders.find(o => o.id === id);
       const updated = await updateOrderStatus(id, status);
-      
+
       // Send WhatsApp notification to customer
       if (order?.customer_phone) {
         const statusMessages = {
-          'Confirmed': `🎉 Great! Your BLOOM order ${order.order_number} has been confirmed. We'll process it shortly.`,
-          'Processing': `📦 Your order ${order.order_number} is being processed. We're preparing your items!`,
-          'Shipped': `🚚 Your order ${order.order_number} has been shipped! Track it here: ${window.location.origin}/order-tracking`,
-          'Delivered': `✨ Your BLOOM order ${order.order_number} has been delivered! Thank you for shopping with us! 💛`,
-          'Cancelled': `❌ Your order ${order.order_number} has been cancelled. Please contact support for assistance.`,
+          Confirmed: `🎉 Hi ${order.customer_name || ''}! Your BLOOM order #${order.order_number} is *Confirmed*. We’re processing it now. ✅`,
+          Processing: `📦 Hi ${order.customer_name || ''}! Your BLOOM order #${order.order_number} is *Processing*. We’re preparing your items. ⏳`,
+          Shipped: `🚚 Hi ${order.customer_name || ''}! Your BLOOM order #${order.order_number} has been *Shipped*. Track: ${window.location.origin}/order-tracking`,
+          Delivered: `✨ Hi ${order.customer_name || ''}! Your BLOOM order #${order.order_number} has been *Delivered*. Thank you for shopping with us! 💛`,
+          Cancelled: `❌ Hi ${order.customer_name || ''}! Your BLOOM order #${order.order_number} has been *Cancelled*. If you need help, reply here.`,
         };
-        
-        const message = statusMessages[status] || `Your order ${order.order_number} status is now: ${status}`;
-        await sendWhatsAppMessage(order.customer_phone, message);
+
+        const message = statusMessages[status] || `Your BLOOM order #${order.order_number} status is now: ${status}`;
+        const waNumber = order.customer_phone;
+        const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+
+        // No WhatsApp Business API in MVP: open a manual WhatsApp chat link for the admin/customer.
+        window.open(waLink, '_blank', 'noopener,noreferrer');
       }
-      
+
       setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
       if (selectedOrder?.id === id) setSelectedOrder(prev => ({ ...prev, status }));
     } catch (e) { setError(e.message); }
@@ -211,8 +215,9 @@ export default function AdminOrdersPage() {
         {/* Order Detail */}
         <div className="border border-ink/10 dark:border-ink/20 bg-background dark:bg-card p-6">
           {selectedOrder ? (
-            <div className="space-y-4">
+              <div className="space-y-4">
               <h2 className="font-display text-lg text-ink dark:text-cream">{selectedOrder.order_number}</h2>
+
               <div className="space-y-2 text-sm">
                 <p className="text-ink dark:text-cream"><span className="text-ink/60 dark:text-cream/60">Customer:</span> {selectedOrder.customer_name}</p>
                 <p className="text-ink dark:text-cream"><span className="text-ink/60 dark:text-cream/60">Email:</span> {selectedOrder.customer_email}</p>
@@ -237,7 +242,7 @@ export default function AdminOrdersPage() {
                       <div key={i} className="flex flex-col gap-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-ink dark:text-cream">
-                            {item.product_name || item.variant_title || 'Unknown item'} × {item.quantity}
+                            {item.title || item.name || item.product_name || item.variant_title || 'Unknown item'} × {item.quantity}
                           </span>
                           <span className="text-ink dark:text-cream">
                             ₹{(itemPrice * item.quantity).toFixed(2)}
@@ -255,12 +260,15 @@ export default function AdminOrdersPage() {
                               setSelectedOrder({ ...next, items });
                             }}
                           >
-                            {(categories || []).map((c) => (
+                            {(selectedOrder.categories && Array.isArray(selectedOrder.categories)
+                              ? selectedOrder.categories
+                              : []
+                            ).map((c) => (
                               <option key={c.id ?? c.name} value={c.name}>
                                 {c.name}
                               </option>
                             ))}
-                            {!categories?.length && (
+                            {!(selectedOrder.categories && Array.isArray(selectedOrder.categories) && selectedOrder.categories.length) && (
                               <option value={category}>{category}</option>
                             )}
                           </select>
@@ -273,10 +281,23 @@ export default function AdminOrdersPage() {
               <div className="border-t border-ink/10 dark:border-ink/20 pt-3 space-y-1">
                 {(() => {
                   const subtotal = (selectedOrder.items || []).reduce(
-                    (sum, item) => sum + ((parseFloat(item.price || 0) || 0) * item.quantity),
+                    (sum, item) => {
+                      const cents =
+                        item?.price_in_cents ??
+                        item?.sale_price_in_cents ??
+                        item?.priceCents;
+                      const price =
+                        cents !== undefined
+                          ? Number(cents) / 100
+                          : (parseFloat(item.price || item.price_formatted || 0) || 0);
+                      return sum + price * (item.quantity || 0);
+                    },
                     0
                   );
-                  const shippingCost = parseFloat(selectedOrder.shipping_cost || 0) || 0;
+
+                  const shippingCost =
+                    parseFloat(selectedOrder.shipping_cost || 0) || 0;
+
                   return (
                     <>
                       <div className="flex justify-between text-sm text-ink/60 dark:text-cream/60">
