@@ -292,7 +292,7 @@ export const products = [
     subtitle: 'Heritage craftsmanship',
     category: 'Ethnic',
 
-    description: 'Premium handmade scrunchie featuring authentic  block printing. Each piece is hand-stamped by skilled artisans using natural dyes. Designed to be gentle on hair with a comfortable, secure fit.',
+    description: 'Premium handmade scrunchie featuring authentic block printing. Each piece is hand-stamped by skilled artisans using natural dyes. Designed to be gentle on hair with a comfortable, secure fit.',
     image: '/Scrunchie.jpg',
 
     images: [
@@ -361,12 +361,10 @@ export const products = [
 
 export const categories = [
   'All',
-  'Daily Essentials',
-  'Stationery',
-  'Makeup',
-  'Travel',
-  'Coin',
-  'Ethnic'
+  'Handbags',
+  'Pouches',
+  'Scrunchies',
+  'Accessories'
 ];
 
 export default products;

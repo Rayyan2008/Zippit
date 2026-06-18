@@ -27,8 +27,40 @@ const EMPTY_FORM = {
   notes: '',
 };
 
+const INDIAN_STATES = [
+  'Andhra Pradesh',
+  'Arunachal Pradesh',
+  'Assam',
+  'Bihar',
+  'Chhattisgarh',
+  'Goa',
+  'Gujarat',
+  'Haryana',
+  'Himachal Pradesh',
+  'Jharkhand',
+  'Karnataka',
+  'Kerala',
+  'Madhya Pradesh',
+  'Maharashtra',
+  'Manipur',
+  'Meghalaya',
+  'Mizoram',
+  'Nagaland',
+  'Odisha',
+  'Punjab',
+  'Rajasthan',
+  'Sikkim',
+  'Tamil Nadu',
+  'Telangana',
+  'Tripura',
+  'Uttar Pradesh',
+  'Uttarakhand',
+  'West Bengal',
+];
+
 function buildWhatsAppMessage({ form, cartItems, total }) {
   const lines = [];
+
   lines.push(`*New Order — ${site.brand.name}*`);
   lines.push('');
   lines.push(`*Name:* ${form.name}`);
@@ -75,7 +107,12 @@ export default function CheckoutPage() {
   const validate = () => {
     const next = {};
     if (!form.name.trim()) next.name = 'Required';
-    if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 10) next.phone = 'Enter a valid phone number';
+
+    const digits = form.phone.replace(/\D/g, '');
+    if (!digits || digits.length !== 10) {
+      next.phone = 'Phone number must be exactly 10 digits';
+    }
+
     if (!form.address.trim()) next.address = 'Required';
     if (!form.city.trim()) next.city = 'Required';
     if (!form.state.trim()) next.state = 'Required';
@@ -241,8 +278,23 @@ export default function CheckoutPage() {
                   </div>
                   <div>
                     <label className="block text-xs eyebrow text-ink/60 mb-2">STATE *</label>
-                    <Input name="state" value={form.state} onChange={handleChange}
-                      placeholder="State" className={errors.state ? 'border-rouge' : 'border-ink/15'} />
+                    <select
+                      name="state"
+                      value={form.state}
+                      onChange={handleChange}
+                      className={`w-full h-10 px-3 text-ink bg-transparent border ${
+                        errors.state ? 'border-rouge' : 'border-ink/15'
+                      } rounded-md focus:outline-none focus:ring-2 focus:ring-rouge/50`}
+                    >
+                      <option value="" disabled>
+                        Select state
+                      </option>
+                      {INDIAN_STATES.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
                     {errors.state && <p className="text-xs text-rouge mt-1">{errors.state}</p>}
                   </div>
                   <div>
