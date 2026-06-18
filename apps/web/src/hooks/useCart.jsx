@@ -83,7 +83,9 @@ export const CartProvider = ({ children }) => {
         price = parseFloat(String(item.product.price).replace(/[^\d.]/g, '')) || 0;
       }
       
-      return total + (price * (item.quantity || 1));
+      // Use the variant's effective price (sale if available) instead of product MRP
+      const quantity = item.quantity || 1;
+      return total + price * quantity;
     }, 0);
   }, [cartItems]);
 
