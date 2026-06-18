@@ -185,7 +185,7 @@ export const site = {
       'Every Bloom pouch is handmade by skilled artisans using techniques passed down through generations. We believe in fair wages, sustainable materials, and preserving cultural heritage through contemporary design.',
     cta: { label: 'Read Our Story', href: '/about' },
     image: {
-      src: 'public/banner.jpg',
+      src: '/banner.jpg',
       alt: 'Artisan crafting traditional embroidered pouch',
     },
     stats: [
