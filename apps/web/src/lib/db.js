@@ -159,7 +159,9 @@ export async function createOrder(order) {
   const { data, error } = await supabase.from('orders').insert([payload]).select().single();
   if (error) throw error;
   try {
-    await supabase.from('order_status_history').insert([{ order_id: data.id, status: 'Confirmed', note: 'Order placed' }]);
+    await supabase.from('order_status_history').insert([
+      { order_id: data.id, status: order?.status || 'Pending Payment', note: 'Order placed' }
+    ]);
   } catch (e) { console.warn('History insert failed:', e); }
   return data;
 }

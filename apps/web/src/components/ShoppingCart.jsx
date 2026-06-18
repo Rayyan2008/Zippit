@@ -5,7 +5,12 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/useCart.jsx';
 import { useToast } from '@/hooks/use-toast';
-import { initiateRazorpayPayment } from '@/components/RazorpayCheckout.jsx';
+import { createOrder } from '@/lib/db';
+import { buildWhatsAppMessage, getWhatsAppUrl } from '@/lib/orderWhatsApp';
+import { site } from '@/data/site.js';
+
+
+
 
 const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
@@ -57,41 +62,68 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
     setCheckingOut(true);
 
     try {
-      await initiateRazorpayPayment({
-        amount: total,
-        currency: 'INR',
-        customerName: customerDetails.name,
-        customerEmail: customerDetails.email,
-        customerPhone: customerDetails.phone,
-        cartItems: cartItems,
-        shippingAddress: {
-          address: customerDetails.address,
-          city: customerDetails.city,
-          state: customerDetails.state,
-          pincode: customerDetails.pincode,
+      const order = await createOrder({
+        customer_name: customerDetails.name.trim(),
+        customer_email: customerDetails.email.trim() || null,
+        customer_phone: customerDetails.phone.trim(),
+        shipping_address: {
+          address: customerDetails.address.trim(),
+          city: customerDetails.city.trim(),
+          state: customerDetails.state.trim(),
+          pincode: customerDetails.pincode.trim(),
+          notes: null,
         },
-        onSuccess: (orderData) => {
-          clearCart();
-          setIsCartOpen(false);
-          setShowCheckoutForm(false);
-          setCheckingOut(false);
-          
-          toast({
-            title: 'Payment successful',
-            description: `Your order ${orderData.order_number} has been placed successfully.`,
-          });
-          
-          navigate('/success');
-        },
-        onFailure: (error) => {
-          setCheckingOut(false);
-          toast({
-            title: 'Payment failed',
-            description: error || 'Please try again.',
-            variant: 'destructive',
-          });
-        },
+        items: cartItems.map((item) => ({
+          product: {
+            id: item.product?.id,
+            title: item.product?.title,
+            image: item.product?.image,
+          },
+          variant: {
+            title: item.variant?.title,
+            price_formatted: item.variant?.price_formatted,
+          },
+          quantity: item.quantity,
+        })),
+        subtotal: total,
+        shipping_cost: 0,
+        total,
+        status: 'Pending Payment',
       });
+
+      const message = buildWhatsAppMessage({
+        form: {
+          name: customerDetails.name.trim(),
+          phone: customerDetails.phone.trim(),
+          address: customerDetails.address.trim(),
+          city: customerDetails.city.trim(),
+          state: customerDetails.state.trim(),
+          pincode: customerDetails.pincode.trim(),
+          notes: null,
+        },
+        cartItems,
+        total,
+      });
+
+      const waUrl = getWhatsAppUrl({
+        customerPhone: customerDetails.phone,
+        message,
+      });
+
+      window.open(waUrl, '_blank');
+
+      clearCart();
+      setIsCartOpen(false);
+      setShowCheckoutForm(false);
+      setCheckingOut(false);
+
+      toast({
+        title: 'Order placed',
+        description: 'We opened WhatsApp with your order details. Please confirm with our team.',
+      });
+
+      navigate('/success', { state: { orderNumber: order?.order_number } });
+
     } catch (error) {
       setCheckingOut(false);
       toast({
@@ -132,7 +164,7 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
             <ShoppingBag className="h-16 w-16 text-ink/20 mb-6" />
             <h3 className="font-display text-2xl text-ink mb-3">Your bag is empty</h3>
             <p className="text-sm text-ink/60 mb-8 max-w-xs">
-              Start adding handmade pouches to your collection
+              Start adding handmade Scrunchies to your collection
             </p>
             <Link to="/shop">
               <Button

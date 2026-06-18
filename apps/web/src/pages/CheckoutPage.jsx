@@ -193,7 +193,7 @@ export default function CheckoutPage() {
             <div className="flex flex-col items-center justify-center py-20 text-center border border-ink/10">
               <ShoppingBag className="h-14 w-14 text-ink/20 mb-6" />
               <h3 className="font-display text-2xl text-ink mb-3">Your bag is empty</h3>
-              <p className="text-sm text-ink/60 mb-8 max-w-xs">Add some handmade pouches before checking out.</p>
+              <p className="text-sm text-ink/60 mb-8 max-w-xs">Add some handmade scrunchies before checking out.</p>
               <Link to="/shop">
                 <Button className="bg-ink text-cream hover:bg-ink/90">Shop Collection</Button>
               </Link>
