@@ -175,14 +175,16 @@ export async function updateOrderStatus(id, status, note = '') {
   return data;
 }
 
+// "Delete" for admin should be a soft-delete so dashboard metrics remain stable.
+// We archive the order instead of removing it.
 export async function deleteOrder(id) {
-  const { error } = await supabase.from('orders').delete().eq('id', id);
+  const { error } = await supabase.from('orders').update({ status: 'Archived' }).eq('id', id);
   if (error) throw error;
-  try {
-    await supabase.from('order_status_history').delete().eq('order_id', id);
-  } catch (e) { console.warn('Order history cleanup failed:', e); }
+
+  // Keep history for audit/troubleshooting.
   return true;
 }
+
 
 export async function resetDashboardData() {
   const { error: historyError } = await supabase.from('order_status_history').delete();

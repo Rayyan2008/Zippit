@@ -69,8 +69,9 @@ export default function AdminOrdersPage() {
     } catch (e) { setError(e.message); }
   };
 
-  const activeOrders = orders.filter(o => o.status !== 'Delivered');
+  const activeOrders = orders.filter(o => o.status !== 'Delivered' && o.status !== 'Archived');
   const deliveredOrders = orders.filter(o => o.status === 'Delivered');
+
 
   const filterOrders = (orderList) => orderList.filter(o => {
     const searchLower = searchTerm.toLowerCase();
