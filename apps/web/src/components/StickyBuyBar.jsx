@@ -28,8 +28,8 @@ const StickyBuyBar = ({ onAddToCart }) => {
 
   const handleAdd = () => {
     onAddToCart?.({
-      id: 'velour-trench',
-      name: 'The Velour Trench',
+      id: 'bloom-trench',
+      name: 'The Bloom Trench',
       price: 480,
       image: spotlight.image.src,
       colorName: 'Stone',
@@ -53,7 +53,7 @@ const StickyBuyBar = ({ onAddToCart }) => {
         />
         <div className="min-w-0">
           <div className="font-display text-sm sm:text-base tracking-tightest truncate">
-            The Velour Trench
+            The Bloom Signature
           </div>
           <div className="eyebrow text-cream/60 truncate">
             {spotlight.price} · Stone

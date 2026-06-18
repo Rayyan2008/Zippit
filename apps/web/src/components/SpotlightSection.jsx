@@ -12,7 +12,7 @@ const SpotlightSection = ({ onAddToCart }) => {
   const handleAdd = () => {
     onAddToCart?.({
       id: 'velour-trench',
-      name: 'The Velour Trench',
+      name: 'The Bloom Trench',
       price: 480,
       image: image.src,
       colorName: 'Stone',
@@ -50,7 +50,7 @@ const SpotlightSection = ({ onAddToCart }) => {
             </div>
             <div className="mt-3 flex items-center justify-between eyebrow text-cream/55">
               <span>01 / 01</span>
-              <span>The Velour Trench</span>
+              <span>The Bloom Signature </span>
             </div>
           </div>
 

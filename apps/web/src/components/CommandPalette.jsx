@@ -109,7 +109,7 @@ const CommandPalette = ({ open, onOpenChange, onOpenCart, onToggleTheme }) => {
 
           <Command.List className="max-h-[60vh] overflow-y-auto px-2 py-3">
             <Command.Empty className="px-4 py-10 text-center text-sm text-ink/55">
-              No results — try “trench”, “lookbook”, or “shipping”.
+              No results — try “scrunchies”, “handbags”, or “shipping”.
             </Command.Empty>
 
             <Command.Group

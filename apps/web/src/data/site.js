@@ -107,22 +107,22 @@ export const site = {
   ],
 
   spotlight: {
-  eyebrow: 'Best Seller',
-  title: ['Bloom', 'Signature', 'Scrunchie'],
-  body:
-    'Designed for comfort, style, and everyday wear. Our signature scrunchies are crafted from soft premium fabrics that hold your hair securely without pulling or damage.',
-  bullets: [
-    'Gentle on all hair types',
-    'Soft premium fabric',
-    'Comfortable all-day hold',
-    'Free shipping on orders over ₹500',
-  ],
-  price: '₹299',
-  cta: { label: 'Shop Now', href: '/shop' },
-  image: {
-    src: '/Scrunchie.jpg',
-    alt: 'Bloom signature scrunchie',
-  },
+    eyebrow: 'Best Seller',
+    title: ['Bloom', 'Signature', 'Scrunchie'],
+    body:
+      'Designed for comfort, style, and everyday wear. Our signature scrunchies are crafted from soft premium fabrics that hold your hair securely without pulling or damage.',
+    bullets: [
+      'Gentle on all hair types',
+      'Soft premium fabric',
+      'Comfortable all-day hold',
+      'Free shipping on orders over ₹500',
+    ],
+    price: '₹???',
+    cta: { label: 'Shop Now', href: '/shop?category=Daily+Essentials' },
+    image: {
+      src: '/Scrunchie.jpg',
+      alt: 'Bloom signature scrunchie',
+    },
     socialProof: '127 sold this month',
   },
 
