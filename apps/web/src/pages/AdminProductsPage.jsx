@@ -5,10 +5,10 @@ import { Trash2, Edit2, Plus, Package, Upload } from 'lucide-react';
 import { getProducts, createProduct, updateProduct, deleteProduct, uploadProductImageToStorage } from '../lib/db';
 
 
-const CATEGORIES = ['Daily Essentials', 'Stationery', 'Makeup', 'Travel', 'Coin', 'Ethnic'];
+const CATEGORIES = ['Handbags', 'Pouches', 'Scrunchies', 'Accessories'];
 
 const EMPTY_FORM = {
-  title: '', subtitle: '', description: '', category: 'Daily Essentials',
+  title: '', subtitle: '', description: '', category: 'Handbags',
   price: '', sale_price: '', stock_quantity: '', ribbon_text: '',
   image: '', is_featured: false, is_active: true,
 };

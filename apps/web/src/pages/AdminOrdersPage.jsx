@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Eye, Package, Send } from 'lucide-react';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
-import { getOrders, updateOrderStatus, deleteOrder } from '../lib/db';
+import { getOrders, updateOrderStatus, deleteOrder, getCategories } from '../lib/db';
 import { sendWhatsAppMessage } from '../services/whatsapp';
 
 const FILTER_STATUS_OPTIONS = ['All', 'Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
@@ -231,14 +231,39 @@ export default function AdminOrdersPage() {
                 <div className="space-y-2">
                   {(selectedOrder.items || []).map((item, i) => {
                     const itemPrice = parseFloat(item.price || 0);
+                    const category = item.category || 'Uncategorized';
                     return (
-                      <div key={i} className="flex justify-between text-sm">
-                        <span className="text-ink dark:text-cream">
-                          {item.product_name || item.variant_title || 'Unknown item'} × {item.quantity}
-                        </span>
-                        <span className="text-ink dark:text-cream">
-                          ₹{(itemPrice * item.quantity).toFixed(2)}
-                        </span>
+                      <div key={i} className="flex flex-col gap-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-ink dark:text-cream">
+                            {item.product_name || item.variant_title || 'Unknown item'} × {item.quantity}
+                          </span>
+                          <span className="text-ink dark:text-cream">
+                            ₹{(itemPrice * item.quantity).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-xs eyebrow text-ink/60 dark:text-cream/60">Category</span>
+                          <select
+                            className="px-3 py-1 border border-ink/15 dark:border-ink/30 bg-background dark:bg-card text-ink dark:text-cream text-xs"
+                            value={category}
+                            onChange={(e) => {
+                              const next = selectedOrder;
+                              const items = Array.isArray(next.items) ? next.items.slice() : [];
+                              if (items[i]) items[i] = { ...items[i], category: e.target.value };
+                              setSelectedOrder({ ...next, items });
+                            }}
+                          >
+                            {(categories || []).map((c) => (
+                              <option key={c.id ?? c.name} value={c.name}>
+                                {c.name}
+                              </option>
+                            ))}
+                            {!categories?.length && (
+                              <option value={category}>{category}</option>
+                            )}
+                          </select>
+                        </div>
                       </div>
                     );
                   })}

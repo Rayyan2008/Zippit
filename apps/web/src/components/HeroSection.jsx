@@ -118,15 +118,14 @@ const HeroSection = () => {
                 mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
               }`}
             >
-              <MagneticButton
-                as="a"
+              <a
                 href={primaryCta.href}
                 data-cursor="hover"
                 className="group inline-flex items-center gap-3 bg-ink px-7 py-4 text-cream eyebrow transition-colors hover:bg-rouge"
               >
                 {primaryCta.label}
                 <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </MagneticButton>
+              </a>
               <a
                 href={secondaryCta.href}
                 data-cursor="hover"
