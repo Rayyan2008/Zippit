@@ -177,7 +177,7 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto px-6 py-6">
+            <div className={`flex-1 overflow-y-auto px-6 py-6 ${showCheckoutForm ? 'hidden' : ''}`}>
               <ul className="space-y-6">
                 {cartItems.map((item, index) => {
                   const product = item.product || {};
@@ -273,7 +273,7 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
               </ul>
             </div>
 
-            <div className="border-t border-ink/10 px-6 py-6 space-y-4">
+            <div className={`border-t border-ink/10 px-6 py-6 space-y-4 ${showCheckoutForm ? 'flex-1 overflow-y-auto' : ''}`}>
               {showCheckoutForm ? (
                 <div className="space-y-4">
                   <h3 className="font-display text-lg text-ink">Delivery Details</h3>
