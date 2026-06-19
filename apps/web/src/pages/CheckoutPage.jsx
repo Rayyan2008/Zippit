@@ -95,6 +95,11 @@ export default function CheckoutPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const payButtonRef = React.useRef(null);
+
+  const scrollToPay = () => {
+    payButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   const total = getCartTotal() || 0;
 
@@ -317,9 +322,9 @@ export default function CheckoutPage() {
                   directly with our team over WhatsApp — no online payment is required right now.
                 </p>
 
-                <Button type="submit" disabled={submitting}
-                  className="w-full bg-ink text-cream hover:bg-ink/90 py-6 eyebrow">
-                  {submitting ? 'Placing order…' : `Pay — ₹${total.toFixed(2)}`}
+                <Button type="submit" ref={payButtonRef} disabled={submitting}
+                           className="w-full bg-ink text-cream hover:bg-ink/90 py-6 eyebrow">
+                          {submitting ? 'Placing order…' : `Pay — ₹${total.toFixed(2)}`}
                 </Button>
               </form>
 
@@ -371,6 +376,17 @@ export default function CheckoutPage() {
           onOpenCart={() => setCartOpen(true)}
           onToggleTheme={toggleTheme}
         />
+
+        {cartItems && cartItems.length > 0 && (
+          <button
+            type="button"
+            onClick={scrollToPay}
+            className="lg:hidden fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-ink text-cream px-5 py-3 text-sm font-medium shadow-lg shadow-black/20"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            Go to Pay
+          </button>
+        )}
       </div>
     </>
   );
