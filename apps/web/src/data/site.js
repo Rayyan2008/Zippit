@@ -33,7 +33,7 @@ export const site = {
       'Handmade with love · Ethically sourced · Built to last',
       '7-day easy returns · Secure payments',
     ],
-    cta: { label: 'Shop Now', href: 'https://youtube.com' },
+    cta: { label: 'Shop Now', href: '/shop' },
   },
 
   nav: {

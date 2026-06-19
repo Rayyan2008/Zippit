@@ -75,6 +75,7 @@ const AnnouncementBar = () => {
         {cta?.href && (
           <a
             href={cta.href}
+
             className="hidden md:inline-flex shrink-0 items-center gap-1.5 eyebrow opacity-90 transition hover:opacity-100"
           >
             {cta.label}
