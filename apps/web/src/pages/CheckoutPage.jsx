@@ -243,14 +243,24 @@ export default function CheckoutPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-              {/* Delivery details form */}
-              <form onSubmit={handlePay} className="lg:col-span-7 space-y-6">
-                <h2 className="eyebrow text-ink/60 mb-2">Delivery Details</h2>
+              {/* Delivery details form
+                  On mobile/tablet, this column scrolls independently within a
+                  height bound so it never gets trapped under fixed
+                  header/footer/bottom-nav chrome, and the Pay button (which
+                  lives at the end of the scrollable content) always remains
+                  reachable. On desktop (lg+), it reverts to normal page flow
+                  with no extra height constraint. */}
+              <form
+                onSubmit={handlePay}
+                className="lg:col-span-7 space-y-6 max-h-[calc(100vh-13rem)] overflow-y-auto overscroll-contain pr-1 -mr-1 lg:max-h-none lg:overflow-visible lg:pr-0 lg:-mr-0"
+              >
+                <h2 className="eyebrow text-ink/60">Delivery Details</h2>
 
-                {/* Ensure Pay CTA is always reachable on short/tall viewports */}
-                <div className="h-[1px]" aria-hidden="true" />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
+
 
                   <div>
                     <label className="block text-xs eyebrow text-ink/60 mb-2">FULL NAME *</label>
