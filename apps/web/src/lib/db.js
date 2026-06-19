@@ -187,23 +187,22 @@ export async function deleteOrder(id) {
 
 
 export async function resetDashboardData() {
-  // Supabase schema cache errors can occur when the RPC name/casing doesn't match.
-  // Try the exact name first.
-  const rpcName = 'Reset dashboard';
+  // Soft-reset: archive orders and inquiries so they stop counting toward
+  // dashboard stats, without permanently deleting real business records.
+  const { error: ordersError } = await supabase
+    .from('orders')
+    .update({ status: 'Archived' })
+    .neq('status', 'Archived');
 
-  const { data: rpcData, error: rpcError } = await supabase.rpc(rpcName);
-  if (!rpcError) return true;
+  if (ordersError) throw ordersError;
 
-  // Fallback: if RPC fails, attempt REST delete with a simple non-null predicate.
-  // (This avoids the earlier UUID/null casting issues as much as possible.)
-  const { error: historyError } = await supabase
-    .from('order_status_history')
-    .delete()
-    .not('order_id', 'is', null);
+  const { error: inquiriesError } = await supabase
+    .from('inquiries')
+    .update({ status: 'Archived' })
+    .neq('status', 'Archived');
 
-  if (historyError) throw historyError;
+  if (inquiriesError) throw inquiriesError;
 
-  // If both approaches fail, the original rpcError is informative.
   return true;
 }
 
@@ -306,13 +305,15 @@ export async function getCustomers() {
 export async function getDashboardStats() {
   const [productsRes, ordersRes, inquiriesRes] = await Promise.all([
     supabase.from('products').select('id, stock_quantity, stock'),
-    supabase.from('orders').select('id, total, status, created_at'),
-    supabase.from('inquiries').select('id, status, name, email, created_at'),
+    supabase.from('orders').select('id, total, status, created_at').neq('status', 'Archived'),
+    supabase.from('inquiries').select('id, status, name, email, created_at').neq('status', 'Archived'),
   ]);
 
   const products = productsRes.data || [];
   const orders = ordersRes.data || [];
   const inquiries = inquiriesRes.data || [];
+
+  // ...rest of the function stays exactly the same
 
   const totalRevenue = orders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
   const pendingOrders = orders.filter(o => o.status === 'Pending' || o.status === 'Confirmed' || o.status === 'Order Placed').length;
