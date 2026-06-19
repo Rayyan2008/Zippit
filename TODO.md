@@ -1,9 +1,7 @@
-# TODO
-
-## Order success TOTAL AMOUNT wrong
-- [ ] Identify how `order` data is persisted/loaded for `SuccessPage` (localStorage vs route state vs API)
-- [ ] Fix `SuccessPage` to display correct total from reliable source (prefer Supabase order by order_number, or use navigate state)
-- [ ] Ensure `CheckoutPage` stores the exact order payload/total used to create order (and not a stale cart total)
-- [ ] Verify `OrderTrackingPage` reads the same source so totals match
-- [ ] Test flow: add item(s) → checkout → success page shows correct total
+- [ ] Create investigation plan
+- [ ] Inspect CheckoutPage Delivery Details pay button layout and responsive behavior
+- [ ] Identify cause of Pay button not visible on certain devices/screen sizes
+- [ ] Implement CSS/layout fix ensuring Pay CTA is always visible at bottom of delivery details form and not overlapped/cut off
+- [ ] Keep existing checkout logic/WhatsApp flow unchanged
+- [ ] Verify Pay button visibility and clickability across mobile/tablet/desktop breakpoints via local build/lint/test
 

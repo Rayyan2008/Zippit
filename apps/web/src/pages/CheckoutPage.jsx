@@ -247,7 +247,11 @@ export default function CheckoutPage() {
               <form onSubmit={handlePay} className="lg:col-span-7 space-y-6">
                 <h2 className="eyebrow text-ink/60 mb-2">Delivery Details</h2>
 
+                {/* Ensure Pay CTA is always reachable on short/tall viewports */}
+                <div className="h-[1px]" aria-hidden="true" />
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
                   <div>
                     <label className="block text-xs eyebrow text-ink/60 mb-2">FULL NAME *</label>
                     <Input name="name" value={form.name} onChange={handleChange}
