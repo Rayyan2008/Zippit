@@ -219,7 +219,7 @@ export default function CheckoutPage() {
           onOpenSearch={() => setPaletteOpen(true)}
         />
 
-        <main className="container mx-auto px-4 pt-28 pb-24 md:pt-32 md:pb-32">
+        <main className="container mx-auto px-4 pt-28 pb-28 md:pt-32 md:pb-40">
           <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-ink/60 hover:text-rouge transition mb-8">
             <ArrowLeft className="h-4 w-4" /> Continue shopping
           </Link>

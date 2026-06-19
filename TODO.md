@@ -1,7 +1,9 @@
 # TODO
 
-- [x] Inspect dashboard reset UI and existing `resetDashboardData()` implementation.
-- [x] Fix Supabase `order_status_history` deletion to include a required WHERE/Filter clause (prevents 400 Bad Request).
-- [ ] Smoke test: open Admin Dashboard and trigger “Reset dashboard”; confirm history is cleared and orders/inquiries remain.
-- [ ] (Optional) Tighten filter if you know the exact primary key/columns of `order_status_history`.
+## Order success TOTAL AMOUNT wrong
+- [ ] Identify how `order` data is persisted/loaded for `SuccessPage` (localStorage vs route state vs API)
+- [ ] Fix `SuccessPage` to display correct total from reliable source (prefer Supabase order by order_number, or use navigate state)
+- [ ] Ensure `CheckoutPage` stores the exact order payload/total used to create order (and not a stale cart total)
+- [ ] Verify `OrderTrackingPage` reads the same source so totals match
+- [ ] Test flow: add item(s) → checkout → success page shows correct total
 
