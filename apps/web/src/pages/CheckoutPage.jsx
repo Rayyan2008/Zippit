@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useTheme } from '@/components/ThemeToggle.jsx';
 import { createOrder } from '@/lib/db';
 import { site } from '@/data/site.js';
+import { createPortal } from 'react-dom';
 
 const EMPTY_FORM = {
   name: '',
@@ -377,15 +378,16 @@ export default function CheckoutPage() {
           onToggleTheme={toggleTheme}
         />
 
-        {cartItems && cartItems.length > 0 && (
+        {cartItems && cartItems.length > 0 && createPortal(
           <button
             type="button"
             onClick={scrollToPay}
-            className="lg:hidden fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-ink text-cream px-5 py-3 text-sm font-medium shadow-lg shadow-black/20"
+            className="lg:hidden fixed bottom-5 right-5 z-[9999] flex items-center gap-2 rounded-full bg-ink text-cream px-5 py-3 text-sm font-medium shadow-lg shadow-black/20"
           >
             <ShoppingBag className="h-4 w-4" />
             Go to Pay
-          </button>
+          </button>,
+          document.body
         )}
       </div>
     </>
