@@ -61,7 +61,9 @@ export default function AdminDashboardPage() {
           loadStats();
         }
       )
-      .subscribe();
+      .subscribe((status, err) => {
+        console.log('Realtime subscription status:', status, err);
+      });
 
     return () => {
       supabase.removeChannel(channel);
