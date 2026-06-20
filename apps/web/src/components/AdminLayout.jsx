@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from './ui/button';
 import { Menu, X, LayoutDashboard, Package, Tag, Ticket, MessageSquare, ShoppingCart, Settings, LogOut, Users } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import CustomCursor from './CustomCursor';
+import { supabase } from '../lib/supabase.js';
+import { useToast } from '../hooks/use-toast';
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
+  const audioRef = useRef(null);
 
   const handleLogout = () => {
     logout();
@@ -29,6 +33,38 @@ export default function AdminLayout() {
     { label: 'Customers', path: '/admin/customers', icon: Users },
     { label: 'Settings', path: '/admin/settings', icon: Settings },
   ];
+
+  // Realtime: notify (sound + toast) whenever a new order is inserted,
+  // active for the whole admin section regardless of which page is open.
+  useEffect(() => {
+    audioRef.current = new Audio('/notification.mp3');
+
+    const channel = supabase
+      .channel('new-orders-admin')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'orders' },
+        (payload) => {
+          const order = payload.new;
+
+          audioRef.current?.play().catch(() => {
+            // Autoplay can be blocked until the user interacts with the page once; safe to ignore.
+          });
+
+          toast({
+            title: '🛍️ New order received!',
+            description: `${order.order_number || 'Order'} — ₹${order.total} from ${order.customer_name || 'a customer'}`,
+          });
+        }
+      )
+      .subscribe((status, err) => {
+        console.log('Realtime subscription status:', status, err);
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen flex bg-cream text-ink">
