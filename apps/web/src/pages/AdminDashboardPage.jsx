@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Package, ShoppingCart, AlertCircle, MessageSquare, ArrowUpRight } from 'lucide-react';
 import { getDashboardStats, resetDashboardData } from '../lib/db';
+import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../hooks/use-toast';
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({ totalProducts: 0, totalOrders: 0, totalRevenue: 0, totalInquiries: 0, pendingOrders: 0, lowStockProducts: 0, chartData: [], recentOrders: [], recentInquiries: [] });
@@ -15,6 +17,8 @@ export default function AdminDashboardPage() {
   const [resetError, setResetError] = useState(null);
 
   const { login } = useAuth();
+  const { toast } = useToast();
+  const audioRef = useRef(null);
 
   const loadStats = async () => {
     setLoading(true);
@@ -30,6 +34,38 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     loadStats();
+  }, []);
+
+  // Realtime: notify (sound + toast) whenever a new order is inserted,
+  // and refresh the dashboard stats so it reflects the new order immediately.
+  useEffect(() => {
+    audioRef.current = new Audio('/notification.mp3');
+
+    const channel = supabase
+      .channel('new-orders-dashboard')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'orders' },
+        (payload) => {
+          const order = payload.new;
+
+          audioRef.current?.play().catch(() => {
+            // Autoplay can be blocked until the user interacts with the page once; safe to ignore.
+          });
+
+          toast({
+            title: '🛍️ New order received!',
+            description: `${order.order_number || 'Order'} — ₹${order.total} from ${order.customer_name || 'a customer'}`,
+          });
+
+          loadStats();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const statCards = [
