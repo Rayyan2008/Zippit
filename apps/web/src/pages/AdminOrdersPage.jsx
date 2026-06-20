@@ -236,13 +236,16 @@ export default function AdminOrdersPage() {
                 <p className="text-xs eyebrow text-ink/60 dark:text-cream/60 mb-2">ITEMS</p>
                 <div className="space-y-2">
                   {(selectedOrder.items || []).map((item, i) => {
-                    const itemPrice = parseFloat(item.price || 0);
+                    const itemPrice = parseFloat(
+                      String(item.variant?.price_formatted || item.price || 0).replace(/[^\d.]/g, '')
+                    ) || 0;
                     const category = item.category || 'Uncategorized';
                     return (
                       <div key={i} className="flex flex-col gap-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-ink dark:text-cream">
-                            {item.title || item.name || item.product_name || item.variant_title || 'Unknown item'} × {item.quantity}
+                            {item.product?.title || item.title || item.name || 'Unknown item'}
+                            {item.variant?.title && item.variant.title !== 'Default' ? ` (${item.variant.title})` : ''} × {item.quantity}
                           </span>
                           <span className="text-ink dark:text-cream">
                             ₹{(itemPrice * item.quantity).toFixed(2)}
@@ -289,7 +292,7 @@ export default function AdminOrdersPage() {
                       const price =
                         cents !== undefined
                           ? Number(cents) / 100
-                          : (parseFloat(item.price || item.price_formatted || 0) || 0);
+                          : (parseFloat(String(item.variant?.price_formatted || item.price || item.price_formatted || 0).replace(/[^\d.]/g, '')) || 0);
                       return sum + price * (item.quantity || 0);
                     },
                     0
