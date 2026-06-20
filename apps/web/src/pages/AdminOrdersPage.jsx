@@ -52,7 +52,10 @@ export default function AdminOrdersPage() {
         };
 
         const message = statusMessages[status] || `Your BLOOM order #${order.order_number} status is now: ${status}`;
-        const waNumber = order.customer_phone;
+        const digits = String(order.customer_phone || '').replace(/\D/g, '');
+        // Assume Indian numbers: if it's a bare 10-digit number, prefix the country code (91).
+        // If it already includes a country code (11+ digits), leave it as-is.
+        const waNumber = digits.length === 10 ? `91${digits}` : digits;
         const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
 
         // No WhatsApp Business API in MVP: open a manual WhatsApp chat link for the admin/customer.
