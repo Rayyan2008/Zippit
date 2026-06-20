@@ -36,7 +36,8 @@ export default function AdminCustomersPage() {
               <p className="text-ink/60 dark:text-cream/60">No customers yet</p>
             </div>
           ) : (
-            <table className="w-full">
+            <div className="overflow-x-auto">
+            <table className="min-w-full text-left">
               <thead className="border-b border-ink/10 dark:border-ink/20 bg-cream dark:bg-card/50">
                 <tr>
                   {['NAME','EMAIL','PHONE','ORDERS','TOTAL SPENT'].map(h => (
@@ -56,6 +57,7 @@ export default function AdminCustomersPage() {
                 ))}
               </tbody>
             </table>
+          </div>
           )
         }
       </div>

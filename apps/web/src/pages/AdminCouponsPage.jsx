@@ -114,6 +114,7 @@ export default function AdminCouponsPage() {
       <div className="border border-ink/10 dark:border-ink/20 bg-background dark:bg-card overflow-hidden">
         {loading ? <div className="p-12 text-center text-ink/40 dark:text-cream/40">Loading…</div> :
           coupons.length === 0 ? <div className="p-12 text-center text-ink/60 dark:text-cream/60">No coupons yet.</div> : (
+          <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-ink/10 dark:border-ink/20 bg-cream dark:bg-card/50">
               <tr>
@@ -143,6 +144,7 @@ export default function AdminCouponsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
