@@ -53,7 +53,7 @@ const ProductGrid = () => {
           <div className="md:col-span-7">
             <div className="eyebrow text-rouge">Featured Collection</div>
             <h2 className="font-display text-display-lg text-ink mt-3 leading-[0.95]">
-              Handmade pouches
+              Handmade Scrunchies
               <span className="text-rouge italic font-light">.</span>
             </h2>
             <p className="mt-5 text-lg text-ink/70 leading-relaxed max-w-xl">
