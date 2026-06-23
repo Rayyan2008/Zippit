@@ -40,7 +40,7 @@ const Header = ({ onOpenCart, onOpenSearch }) => {
     >
       <div className="container mx-auto">
         <div
-          className={`grid grid-cols-[1fr_auto_1fr] items-center transition-[height] duration-500 ${scrolled ? 'h-14' : 'h-20'
+          className={`grid grid-cols-[1fr_auto_1fr] items-center transition-[height] duration-500 ${scrolled ? 'h-17' : 'h-24'
             }`}
         >
           <div className="flex items-center gap-1 md:gap-3">
@@ -145,13 +145,17 @@ const Header = ({ onOpenCart, onOpenSearch }) => {
           </div>
 
           <Link
-            to="/"
-            data-cursor="hover"
-            className="font-display text-2xl md:text-3xl tracking-tightest text-ink transition hover:text-rouge"
-            aria-label={`${site.brand.name} — home`}
-          >
-            {site.brand.wordmark}
-          </Link>
+  to="/"
+  data-cursor="hover"
+  aria-label={`${site.brand.name} — home`}
+  className="flex items-center justify-center"
+>
+  <img
+    src="/logo.png"
+    alt={site.brand.name}
+    className="h-24 w-auto object-contain scale-125"
+  />
+</Link>
 
           <div className="flex items-center justify-end gap-1 md:gap-2">
             <button

@@ -75,21 +75,16 @@ export default function AdminLayout() {
         } overflow-hidden`}
       >
         {/* Logo Section */}
-        <div className="border-b border-ink/10 px-6 py-6 flex items-center justify-between flex-shrink-0">
-          <Link
-            to="/"
-            className="font-display text-2xl tracking-tightest text-ink hover:text-rouge transition-colors duration-300"
-          >
-            Bloom
-          </Link>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="lg:hidden inline-flex h-9 w-9 items-center justify-center text-ink hover:opacity-60 transition-opacity"
-            aria-label="Toggle sidebar"
-          >
-            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
+        <Link
+  to="/"
+  className="flex items-center"
+>
+  <img
+    src="/logo.png"
+    alt="The Bloom Store"
+    className="h-20 w-auto object-contain margin-left: 10px; margin-right: 10px; padding: 10px; "
+    />
+  </Link>
 
         {/* Admin Info */}
         <div className={`border-b border-ink/10 px-6 py-4 ${!sidebarOpen && 'lg:px-3'}`}>

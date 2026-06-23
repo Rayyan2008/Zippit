@@ -82,15 +82,21 @@ const Footer = () => {
         </div>
 
         <div className="mt-16 md:mt-20 hairline" />
-
-        <div
-          aria-hidden="true"
-          className="mt-10 md:mt-14 select-none font-display tracking-tightest leading-none text-ink"
-          style={{ fontSize: 'clamp(4rem, 18vw, 16rem)' }}
-        >
-          <span className="block text-center">{site.brand.wordmark}</span>
-        </div>
-
+        <div className="flex justify-center">
+  <Link
+    to="/"
+    data-cursor="hover"
+    aria-label={`${site.brand.name} — home`}
+    className="my-10"
+  >
+    <img
+      src="/logo.png"
+      alt={site.brand.name}
+      className="h-80 md:h-100 w-auto object-contain margin-top-10px margin-bottom-10px margin-right-20px"
+    />
+  </Link>
+</div>
+        
         <div className="ticker-line mt-6" />
 
         <div className="mt-8 flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-4">
