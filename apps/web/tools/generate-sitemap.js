@@ -50,6 +50,10 @@ function pathToFileUrl(p) {
 }
 
 async function generate() {
+  // Public routes must match apps/web/src/App.jsx (react-router)
+  // Excludes:
+  // - /admin/* (admin auth + dashboard)
+  // - dashboard/private/auth routes
   const publicStaticRoutes = [
     '/',
     '/shop',
@@ -61,7 +65,10 @@ async function generate() {
     '/privacy',
     '/success',
     '/order-tracking',
+    // /product/:id handled separately below
   ];
+
+
 
   const productDetailTemplate = '/product/{id}';
 
