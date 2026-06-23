@@ -6,14 +6,22 @@
 
 @layer base {
   :root {
-    --cream: 36 38% 96%;
-    --ink: 350 35% 8%;
-    --rouge: 351 70% 48%;
-    --wine: 348 60% 22%;
-    --blush: 16 50% 87%;
-    --parchment: 35 30% 90%;
-    --gold: 41 49% 60%;
-    --signal: 351 90% 55%;
+    /* Bloom Scrunchies brand palette (HEX) */
+    --tea-green: #CAD69B;
+    --palm-leaf: #86926A;
+    --cotton-rose: #EFBCC2;
+    --eggshell: #F6EFDD;
+
+    /* HSL tokens (Tailwind consumes HSL as "H S% L%") */
+    /* Approximations tuned for premium softness + contrast */
+    --cream: 49 60% 93%; /* Eggshell */
+    --ink: 88 16% 25%; /* soft olive/brown for text */
+    --rouge: 91 19% 43%; /* Palm Leaf for primary/CTAs */
+    --wine: 80 24% 62%; /* Tea Green as secondary */
+    --blush: 349 69% 83%; /* Cotton Rose as accent */
+    --parchment: 48 55% 88%; /* derived eggshell-neutral */
+    --gold: 47 55% 70%;
+    --signal: 351 70% 60%;
 
     --background: var(--cream);
     --foreground: var(--ink);
@@ -21,19 +29,31 @@
     --card-foreground: var(--ink);
     --popover: var(--cream);
     --popover-foreground: var(--ink);
+
+    /* Primary/CTA */
     --primary: var(--rouge);
-    --primary-foreground: var(--cream);
+    --primary-foreground: 49 60% 93%; /* eggshell */
+
+    /* Secondary accents */
     --secondary: var(--wine);
-    --secondary-foreground: var(--cream);
+    --secondary-foreground: var(--ink);
+
+    /* Muted UI */
     --muted: var(--parchment);
-    --muted-foreground: 350 15% 30%;
+    --muted-foreground: 88 14% 35%;
+
+    /* Accent UI */
     --accent: var(--blush);
     --accent-foreground: var(--ink);
+
     --destructive: 0 80% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 35 20% 85%;
-    --input: 35 20% 85%;
+
+    /* Subtle dividers/inputs */
+    --border: 49 30% 78%;
+    --input: 49 30% 78%;
     --ring: var(--rouge);
+
     --radius: 0px;
 
     --sidebar-background: var(--cream);
@@ -42,42 +62,57 @@
     --sidebar-primary-foreground: var(--cream);
     --sidebar-accent: var(--parchment);
     --sidebar-accent-foreground: var(--ink);
-    --sidebar-border: 35 20% 85%;
+    --sidebar-border: 49 30% 78%;
     --sidebar-ring: var(--rouge);
   }
 
   .dark {
-    --cream: 350 30% 5%;
-    --ink: 36 38% 96%;
-    --rouge: 351 80% 60%;
-    --wine: 348 50% 35%;
-    --blush: 16 30% 18%;
-    --parchment: 350 20% 11%;
-    --gold: 41 60% 65%;
-    --signal: 351 100% 65%;
+    /* Luxury dark mode: keep feminine warmth */
+    --cream: 60 22% 9%;
+    --ink: 80 25% 92%;
+    --rouge: 92 18% 53%;
+    --wine: 86 24% 36%;
+    --blush: 349 55% 35%;
+    --parchment: 50 18% 18%;
+    --gold: 47 55% 70%;
+    --signal: 351 70% 60%;
 
     --background: var(--cream);
     --foreground: var(--ink);
-    --card: 350 25% 8%;
+    --card: 60 22% 11%;
     --card-foreground: var(--ink);
     --popover: var(--cream);
     --popover-foreground: var(--ink);
+
     --primary: var(--rouge);
-    --primary-foreground: 350 30% 5%;
+    --primary-foreground: var(--cream);
+
     --secondary: var(--wine);
     --secondary-foreground: var(--ink);
+
     --muted: var(--parchment);
-    --muted-foreground: 35 20% 70%;
+    --muted-foreground: 80 12% 70%;
+
     --accent: var(--blush);
     --accent-foreground: var(--ink);
-    --border: 350 20% 16%;
-    --input: 350 20% 16%;
+
+    --border: 50 18% 25%;
+    --input: 50 18% 25%;
     --ring: var(--rouge);
   }
+
 
   * {
     border-color: hsl(var(--border));
   }
+
+  :root {
+    /* Design-token helpers for premium gradients */
+    --bs-grad-eggshell-cotton: linear-gradient(135deg, color-mix(in oklab, var(--eggshell) 86%, white 14%), color-mix(in oklab, var(--eggshell) 64%, var(--cotton-rose) 36%));
+    --bs-grad-eggshell-tea: linear-gradient(135deg, color-mix(in oklab, var(--eggshell) 90%, white 10%), color-mix(in oklab, var(--eggshell) 62%, var(--tea-green) 38%));
+    --bs-grad-tea-cotton: linear-gradient(135deg, color-mix(in oklab, var(--tea-green) 55%, var(--eggshell) 45%), color-mix(in oklab, var(--cotton-rose) 65%, var(--eggshell) 35%));
+  }
+
 
   html {
     scroll-behavior: smooth;
