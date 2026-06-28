@@ -11,6 +11,7 @@ import EditorialQuote from '@/components/EditorialQuote.jsx';
 import Lookbook from '@/components/Lookbook.jsx';
 import ProductGrid from '@/components/ProductGrid.jsx';
 import StorySection from '@/components/StorySection.jsx';
+import InstagramSection from '../components/InstagramSection.jsx';
 import FAQ from '@/components/FAQ.jsx';
 import Newsletter from '@/components/Newsletter.jsx';
 import ShoppingCart from '@/components/ShoppingCart.jsx';
@@ -99,6 +100,8 @@ const HomePage = () => {
           <ProductGrid />
 
           <StorySection />
+
+          <InstagramSection />
 
           <FAQ />
 

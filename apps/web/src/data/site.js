@@ -196,6 +196,19 @@ export const site = {
     ],
   },
 
+    instagram: {
+    eyebrow: 'N° 09 — @theofficialbloomstore',
+    title: 'Follow @theofficialbloomstore on Instagram',
+    body: 'Tag your Pinteresty Accesories stack with #WornByYou for a chance to be featured.',
+    handle: '@thebloomstore',
+    href: 'https://instagram.com/theofficialbloomstore',
+
+    images: [
+      { src: '/green.jpg', alt: 'Bloom Instagram post' },
+      { src: '/red.jpg', alt: 'Bloom Instagram post' },
+    ],
+  },
+
   faq: [
     {
     q: 'What makes Bloom handmade accessories special?',
